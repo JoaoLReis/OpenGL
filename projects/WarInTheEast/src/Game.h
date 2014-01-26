@@ -4,7 +4,7 @@
 
 #include "Manager.h"
 
-class game
+class Game
 {
 private:
 	bool Running;
@@ -13,7 +13,7 @@ private:
 	SDL_Event Event;
 	Manager* manager;
 public:
-	game();
+	Game();
 
 	int OnExecute();
 	bool OnInit();

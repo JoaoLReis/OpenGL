@@ -1,23 +1,23 @@
 #include "Game.h"
 
-game::game()
+Game::Game()
 {
 	window = NULL;
 	Running = true;
 }
 
 //moving updates, math etc
-void game::OnLoop()
+void Game::OnLoop()
 {
 
 }
 
-void game::OnRender()
+void Game::OnRender()
 {
 	manager->draw();
 }
 
-void game::OnEvent(SDL_Event* Event)
+void Game::OnEvent(SDL_Event* Event)
 {
 	if(Event->type == SDL_QUIT)
 	{
@@ -27,7 +27,7 @@ void game::OnEvent(SDL_Event* Event)
 	SDL_GL_SwapWindow(window);
 }
 
-bool game::OnInit()
+bool Game::OnInit()
 {
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -45,7 +45,7 @@ bool game::OnInit()
 	return true;
 }
 
-bool game::OnGlewInit()
+bool Game::OnGlewInit()
 {
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -57,13 +57,13 @@ bool game::OnGlewInit()
 	return true;
 }
 
-bool game::OnGameInit()
+bool Game::OnGameInit()
 {
 	manager = new Manager();
 	return true;
 }
 
-int game::OnExecute()
+int Game::OnExecute()
 {
 	if(OnInit() == false)
 	{
@@ -96,7 +96,7 @@ int game::OnExecute()
 	return 0;
 }
 
-void game::Cleanup()
+void Game::Cleanup()
 {
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
