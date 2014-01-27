@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Includes.h"
-#include "Face.h"
+#include "Vertex.h"
 #include "ShaderProgram.h"
 
 class Piece
@@ -16,17 +16,17 @@ private:
 	ShaderProgram* shaderProg;
 
 	std::vector<Vertex> Vertexes;
-	std::vector<Face*> *faces; 
+	std::vector<unsigned int> indices;
 
-	GLuint VboId[2], VaoId, progID;
+	GLuint VboId[2], VaoId, indexBuffer, progID;
 	GLint unifID, normalID, uboID;
 
 public:
-	Piece(std::vector<Vertex> vs, std::vector<Face*> *faces, ShaderProgram* prog);
+	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog);
 
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
 	void createBufferObject();
-	void addFace(Face* f);
+	void addIndex(unsigned int v);
 
 	glm::mat4 createModelMatrix();
 };

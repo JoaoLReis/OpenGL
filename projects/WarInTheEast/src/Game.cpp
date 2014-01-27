@@ -80,15 +80,24 @@ int Game::OnExecute()
 		return -1;
 	}
 
+	int start, end;
 	//primary run loop
 	while(Running)
 	{
+		start = SDL_GetTicks();
 		while(SDL_PollEvent(&Event))
 		{
 			OnEvent(&Event);
 		}
+
 		OnLoop();
 		OnRender();
+
+		end = SDL_GetTicks() - start;
+		if(end < 1000 / FRAMES_PER_SECOND)
+		{
+			SDL_Delay(1000 / FRAMES_PER_SECOND - end);
+		}
 	}
 
 	Cleanup();

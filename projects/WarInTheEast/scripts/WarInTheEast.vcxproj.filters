@@ -57,9 +57,6 @@
     <ClCompile Include="..\src\Piece.cpp">
       <Filter>Source Files\Drawables</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Face.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Vertex.cpp">
       <Filter>Source Files\Drawables</Filter>
     </ClCompile>
@@ -84,9 +81,6 @@
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Piece.h">
-      <Filter>Header Files\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Face.h">
       <Filter>Header Files\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Vertex.h">

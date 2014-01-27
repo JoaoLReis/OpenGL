@@ -35,6 +35,8 @@
 #define tFOVY 30.0f
 #define PI 3.141f
 
+#define FRAMES_PER_SECOND 60
+
 /*static const glm::vec3 ligthpos = glm::vec3(0.0, 0.0, 5.0);
 
 static const glm::vec2 LightAttenuation = glm::vec2(0.0, 0.005);

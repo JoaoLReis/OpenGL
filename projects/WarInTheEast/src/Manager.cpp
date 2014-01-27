@@ -39,35 +39,28 @@ void Manager::initMapList()
 Scene *Manager::initMap1()
 {
 	std::vector<Piece*> *ps = new std::vector<Piece*>;
-	std::vector<Face*> *fs = new std::vector<Face*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
-	std::vector<GLubyte> *is = new std::vector<GLubyte>;
+	std::vector<unsigned int> *is = new std::vector<unsigned int>;
 	ShaderProgram *shProg = createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl");
 
 	Vertex *v = new Vertex();
-	v->XYZW = glm::vec4( -1.0f, -1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 0.0f); // 0 - FRONT
+	v->XYZW = glm::vec4( -0.5f, -0.5f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 0.0f); // 0 - FRONT
 	vs->push_back(*v);
-	v->XYZW = glm::vec4( 1.0f, -1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (1.0f, 0.0f);  // 1
+	v->XYZW = glm::vec4( 0.5f, -0.5f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (1.0f, 0.0f);  // 1
 	vs->push_back(*v);
-	v->XYZW = glm::vec4( 1.0f, 1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (1.0f, 1.0f);  // 2
+	v->XYZW = glm::vec4( 0.5f, 0.5f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (1.0f, 1.0f);  // 2
 	vs->push_back(*v);
-	v->XYZW = glm::vec4( 1.0f, 1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (1.0f, 1.0f);  // 2
-	vs->push_back(*v);
-	v->XYZW = glm::vec4( -1.0f, 1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 1.0f);  // 3
-	vs->push_back(*v);
-	v->XYZW = glm::vec4( -1.0f, -1.0f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 0.0f);  // 0
+	v->XYZW = glm::vec4( -0.5f, 0.5f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 1.0f);  // 3
 	vs->push_back(*v);
 
-	Face *f = new Face(is);
-	f->addIndex(0);
-	f->addIndex(1);
-	f->addIndex(2);
-	f->addIndex(3);
-	f->addIndex(4);
-	f->addIndex(5);
-	fs->push_back(f);
+	is->push_back(0);
+	is->push_back(1);
+	is->push_back(2);
+	is->push_back(2);
+	is->push_back(3);
+	is->push_back(0);
 
-	Piece *p = new Piece(*vs, fs, shProg);
+	Piece *p = new Piece(*vs, *is, shProg);
 	ps->push_back(p);
 	return(new Scene(ps));
 }

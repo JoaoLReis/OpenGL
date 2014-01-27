@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Includes.h"
-
 #include "Manager.h"
+#include <time.h> 
 
 class Game
 {
@@ -11,7 +11,11 @@ private:
 	SDL_Window* window;
 	SDL_GLContext context;
 	SDL_Event Event;
+
 	Manager* manager;
+
+	int frame;
+
 public:
 	Game();
 

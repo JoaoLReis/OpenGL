@@ -1,9 +1,9 @@
 #include "Piece.h"
 
-Piece::Piece(std::vector<Vertex> vs, std::vector<Face*> *fs, ShaderProgram* prog)
+Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog)
 {
 	Vertexes = vs;
-	faces = fs;
+	indices = is;
 	shaderProg = prog;
 	scale = glm::mat4(1.0f);
 	initTransformation = glm::mat4(1.0f);
@@ -20,6 +20,10 @@ void Piece::createBufferObject()
 	uboID = glGetUniformBlockIndex(progID, "SharedMatrices");
 
 	glUniformBlockBinding(progID, uboID, 0);
+
+	glGenBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &VaoId);
 	glBindVertexArray(VaoId);
@@ -67,19 +71,22 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 	glUniformMatrix4fv(unifID, 1, GL_TRUE, glm::value_ptr(modelMatrix));	
 	glUniformMatrix3fv(normalID, 1, GL_FALSE, glm::value_ptr(glm::mat3(glm::transpose(glm::inverse( viewMatrix * glm::transpose(modelMatrix))))));
 
-	/*for (std::vector<Face*>::iterator it = faces->begin() ; it != faces->end(); ++it)
-	{
-		(*it)->draw();
-	}*/
-	glDrawArrays(GL_TRIANGLES,0,Vertexes.size());
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glDrawElements(
+		 GL_TRIANGLES,      // mode
+		 indices.size(),    // count
+		 GL_UNSIGNED_INT,   // type
+		 (void*)0           // element array buffer offset
+	 );
 
 	glUseProgram(0);
 	glBindVertexArray(0);
 }
 
-void Piece::addFace(Face* f)
+void Piece::addIndex(unsigned int v)
 {
-	faces->push_back(f);
+	indices.push_back(v);
 }
 
 glm::mat4 Piece::createModelMatrix(){
