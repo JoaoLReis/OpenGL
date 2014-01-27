@@ -73,13 +73,8 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	glDrawElements(
-		 GL_TRIANGLES,      // mode
-		 indices.size(),    // count
-		 GL_UNSIGNED_INT,   // type
-		 (void*)0           // element array buffer offset
-	 );
-
+	glDrawElementsBaseVertex(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0, 0);
+	
 	glUseProgram(0);
 	glBindVertexArray(0);
 }

@@ -7,7 +7,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GL/glew.h"
-#include "GL/freeglut.h"
 
 #include <iostream>
 #include <sstream>
