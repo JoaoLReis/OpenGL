@@ -15,8 +15,35 @@ std::string readFromFile(const char* filename) {
 	return content;
 }
 
-void ShaderProgram::addVertexShader(const char* filename) {
+void checkShaderCompilation(GLuint shaderId)
+{
 	GLint isCompiled = 0;
+
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &isCompiled);
+	if (isCompiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//
+		std::vector<GLchar> infoLog(maxLength);
+		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &infoLog[0]);
+
+		//
+		glDeleteShader(shaderId);
+
+		if (infoLog.size() >= 0){
+			std::cerr << "SHADER COMPILE ERROR->" << std::endl;
+		}
+		//print to cerr the infolog
+		for (unsigned int i = 0; i <= (infoLog.size() - 1); i++) {
+			std::cerr << infoLog[i];
+		}
+		exit(1);
+	}
+}
+
+void ShaderProgram::addVertexShader(const char* filename) {
 	std::string var = readFromFile(filename);
 
 	const GLchar* VertexShader = var.c_str();
@@ -25,28 +52,8 @@ void ShaderProgram::addVertexShader(const char* filename) {
 	glShaderSource(VertexShaderId, 1, &VertexShader, 0);
 	glCompileShader(VertexShaderId);
 
-	glGetShaderiv(VertexShaderId, GL_COMPILE_STATUS, &isCompiled);
-	if(isCompiled == GL_FALSE)
-	{
-			GLint maxLength = 0;
-			glGetShaderiv(VertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
- 
-			//
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(VertexShaderId, maxLength, &maxLength, &infoLog[0]);
- 
-			//
-			glDeleteShader(VertexShaderId);
+	checkShaderCompilation(VertexShaderId);
 
-			if(infoLog.size()>= 0){
-				std::cerr<<"VERTEX SHADER COMPILE ERROR->"<<std::endl;
-			}
-			//print to cerr the infolog
-			for(unsigned int i = 0; i<= (infoLog.size()-1); i++) {
-				std::cerr<< infoLog[i];
-			}
-			exit(1);
-	}
 	glAttachShader(ProgramId, VertexShaderId);
 
 }
@@ -61,30 +68,7 @@ void ShaderProgram::addFragmentShader(const char* filename) {
 	glShaderSource(FragmentShaderId, 1, &FragmentShader, 0);
 	glCompileShader(FragmentShaderId);
 
-	glGetShaderiv(FragmentShaderId, GL_COMPILE_STATUS, &isCompiled);
-	if(isCompiled == GL_FALSE)
-	{
-			GLint maxLength = 0;
-			glGetShaderiv(FragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
- 
-			//
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(FragmentShaderId, maxLength, &maxLength, &infoLog[0]);
- 
-			//
-			glDeleteShader(FragmentShaderId);
-			//
-			glDeleteShader(VertexShaderId);
- 
-			if(infoLog.size()>= 0){
-				std::cerr<<"FRAGMENT SHADER COMPILE ERROR->"<<std::endl;
-			}
-			//print to cerr the infolog
-			for(unsigned int i = 0; i<= (infoLog.size()-1); i++) {
-				std::cerr<< infoLog[i];
-			}
-			exit(1);
-	}
+	checkShaderCompilation(FragmentShaderId);
 
 	glAttachShader(ProgramId, FragmentShaderId);
 
