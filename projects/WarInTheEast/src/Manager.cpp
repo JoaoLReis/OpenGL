@@ -4,6 +4,8 @@ Manager::Manager()
 {
 	camera = new Camera();
 	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR); 
+	camera->OffsetOrientation(glm::vec3(0.0, 1.0, 0.0), -45);
+	camera->OffsetOrientation(glm::vec3(1.0, 0.0, 0.0), 45);
 	camera->createViewMatrix(0, 0, -20, 0, 0, 0);
 	mapList = new std::vector<Scene*>;
 	initMapList();
@@ -38,10 +40,15 @@ void Manager::initMapList()
 
 Scene *Manager::initMap1()
 {
+	PieceReader::getInstance().init();
 	std::vector<Piece*> *ps = new std::vector<Piece*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
 	std::vector<unsigned int> *is = new std::vector<unsigned int>;
 	ShaderProgram *shProg = createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl");
+
+	/*
+	+++++++++++++++++++++++++++++++++++++++++++ PREFAB ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	*/
 
 	Vertex *v = new Vertex();
 	v->XYZW = glm::vec4( -0.5f, -0.5f, 0.0, 1.0f ), v->RGBA = glm::vec4(  0.9f, 0.0f, 0.0f, 1.0f ), v->NORMAL = glm::vec4( 0.0f, 0.0, 1.0f, 1.0f), v->UV = glm::vec2 (0.0f, 0.0f); // 0 - FRONT
@@ -62,5 +69,27 @@ Scene *Manager::initMap1()
 
 	Piece *p = new Piece(*vs, *is, shProg);
 	ps->push_back(p);
+
+	vs->clear();
+	is->clear();
+
+	/*
+	+++++++++++++++++++++++++++++++++++++++++++++++ CYLINDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	*/
+	PieceReader::getInstance().readObject("..\\objects\\Cylinder.obj");
+	
+	*vs = PieceReader::getInstance().getVertices();
+	*is = PieceReader::getInstance().getIndices();
+	p = new Piece(*vs, *is, shProg); 
+	ps->push_back(p);
+
+	PieceReader::getInstance().clearAll();
+	vs->clear();
+	is->clear();
+
+	/*
+	+++++++++++++++++++++++++++++++++++++++++++++++          +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	*/
+
 	return(new Scene(ps));
 }

@@ -15,7 +15,7 @@ private:
 
 	ShaderProgram* shaderProg;
 
-	std::vector<Vertex> Vertexes;
+	std::vector<Vertex> vertexes;
 	std::vector<unsigned int> indices;
 
 	GLuint VboId[2], VaoId, indexBuffer, progID;
