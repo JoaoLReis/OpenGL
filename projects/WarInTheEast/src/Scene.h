@@ -7,6 +7,7 @@
 class Scene
 {
 	std::vector<Piece*>* pieces;
+
 public:
 	Scene(std::vector<Piece*>* v);
 	
