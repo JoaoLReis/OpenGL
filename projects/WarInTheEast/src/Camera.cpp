@@ -7,6 +7,7 @@ Camera::Camera()
 	last_mx = 0, last_my = 0;
 	RotationAngleX = 0;
 	RotationAngleY = 0;
+	createViewMatrix(0, 0, -20, 0, 0, 0);
 }
 
 void Camera::setPerspective(float fovy, float aspect, float zNear, float zFar) 
