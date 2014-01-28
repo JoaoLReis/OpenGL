@@ -20,7 +20,10 @@ public:
 	Manager();
 
 	void draw();
-	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 	void initMapList();
+	void updateCameraRotation(int x, int y);
+
+	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
+
 	Scene *initMap1();
 };

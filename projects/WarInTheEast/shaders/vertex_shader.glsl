@@ -16,10 +16,15 @@ layout(std140) uniform SharedMatrices
 	mat4 ProjectionMatrix;
 };
 
+out vec4 ex_Vertex;
+out vec3 ex_Normal;
+out vec2 ex_Texcoord;
 out vec4 ex_Color;
 
 void main () {
+	ex_Vertex = ((ViewMatrix * ModelMatrix) * in_Position);
+	ex_Normal = normalize(NormalMatrix * vec3(in_Normal));
+	//ex_Texcoord = vec2(in_Texture.x, 1.0-in_Texture.y);;
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_Position;
-	//gl_Position = in_Position;
 	ex_Color = in_Color;
 }

@@ -14,14 +14,15 @@ void Game::OnLoop()
 
 void Game::OnRender()
 {
+	glClear(GL_COLOR_BUFFER_BIT);
 	manager->draw();
 	SDL_GL_SwapWindow(window);
 }
 
-void Game::OnEvent(SDL_Event* Event)
+bool Game::OnEvent(SDL_Event* Event)
 {
-	int x = 0, y = 0;
 
+	static int x = 0, y = 0;
 	if(Event->type == SDL_QUIT)
 	{
 		Running = false;
@@ -30,11 +31,15 @@ void Game::OnEvent(SDL_Event* Event)
 	if (Event->type == SDL_MOUSEMOTION)
 	{
 		//Get the mouse coordinates 
-		x = Event->motion.x;
-		y = Event->motion.y;
+		x = Event->motion.x - WINDOW_WIDTH / 2;
+		y = -(Event->motion.y - WINDOW_HEIGHT / 2);
+
 		std::cout << "Mouse->X : " << x << std::endl;
 		std::cout << "Mouse->Y : " << y << std::endl;
+		manager->updateCameraRotation(x, y);	
+		return true;
 	}
+	return false;
 }
 
 bool Game::OnInit()
@@ -43,9 +48,9 @@ bool Game::OnInit()
 	{
 		return false;
 	}
-
+	
 	//creates a window
-	if((window = SDL_CreateWindow("SDL Render Clear", 100, 100, 640, 480, SDL_WINDOW_OPENGL)) == NULL)
+	if ((window = SDL_CreateWindow("SDL Render Clear", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL)) == NULL)
 	{
 		return false;
 	}
@@ -58,12 +63,14 @@ bool Game::OnInit()
 bool Game::OnGlewInit()
 {
 	glewExperimental = GL_TRUE;
-	glewInit();
+	GLenum err = glewInit();
+	
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 
-	GLuint vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-
-	printf("%u\n", vertexBuffer);
+	}
 	return true;
 }
 
@@ -97,7 +104,8 @@ int Game::OnExecute()
 		start = SDL_GetTicks();
 		while(SDL_PollEvent(&Event))
 		{
-			OnEvent(&Event);
+			if (OnEvent(&Event))
+				break;
 		}
 
 		OnLoop();

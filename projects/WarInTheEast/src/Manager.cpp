@@ -11,6 +11,15 @@ Manager::Manager()
 	initMapList();
 }
 
+void Manager::updateCameraRotation(int x, int y)
+{
+	camera->setRotationAngleY(camera->getRotationAngleY() + (x - camera->getLast_mx()));
+	camera->setRotationAngleX(camera->getRotationAngleX() + (y - camera->getLast_my()));
+	camera->setLast_mx(x);
+	camera->setLast_my(y);
+	camera->updateCamera();
+}
+
 void Manager::draw()
 {
 	activeScene->draw(camera->getViewMatrix(), camera->getProjectionMatrix(), camera->computeCameraCenter());
@@ -156,7 +165,7 @@ Scene *Manager::initMap1()
 	PieceReader::getInstance().clearAll();
 	vs->clear();
 	is->clear();
-
+	
 	/*
 	+++++++++++++++++++++++++++++++++++++++++++++++          +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	*/
