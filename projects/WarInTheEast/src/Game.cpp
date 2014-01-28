@@ -15,16 +15,26 @@ void Game::OnLoop()
 void Game::OnRender()
 {
 	manager->draw();
+	SDL_GL_SwapWindow(window);
 }
 
 void Game::OnEvent(SDL_Event* Event)
 {
+	int x = 0, y = 0;
+
 	if(Event->type == SDL_QUIT)
 	{
 		Running = false;
 	}
-
-	SDL_GL_SwapWindow(window);
+	else
+	if (Event->type == SDL_MOUSEMOTION)
+	{
+		//Get the mouse coordinates 
+		x = Event->motion.x;
+		y = Event->motion.y;
+		std::cout << "Mouse->X : " << x << std::endl;
+		std::cout << "Mouse->Y : " << y << std::endl;
+	}
 }
 
 bool Game::OnInit()

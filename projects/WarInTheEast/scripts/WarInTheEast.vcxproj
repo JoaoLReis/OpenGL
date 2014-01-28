@@ -36,9 +36,6 @@
     <None Include="..\shaders\fragment_shader.glsl" />
     <None Include="..\shaders\vertex_shader.glsl" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="..\objects\Cylinder.obj" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>
     <RootNamespace>Assignment1</RootNamespace>
