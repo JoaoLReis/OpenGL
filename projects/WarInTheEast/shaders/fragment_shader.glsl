@@ -30,7 +30,7 @@ void main(void)
 	vec3 V = vec3(ex_Vertex);
 	vec3 N = normalize(ex_Normal);
 	
-	vec3 Lpos = vec3(ViewMatrix * vec4(LightPosition, 1.0f));//luz em eyespace
+	vec3 Lpos = LightPosition;//vec3(ViewMatrix * vec4(LightPosition, 1.0f));//luz em eyespace
 	vec3 L = Lpos - V;
 	float Ldist = length(L);
 	L = normalize(L);
@@ -53,6 +53,6 @@ void main(void)
 
 	float attenuation = 1 / (1.0 +LightAttenuation.x * Ldist + LightAttenuation.y * pow(Ldist,2));
 	
-	colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0);
+	colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * ex_Color;
 	//colorOut = ex_Color;
 }

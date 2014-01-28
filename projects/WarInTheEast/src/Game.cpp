@@ -14,7 +14,7 @@ void Game::OnLoop()
 
 void Game::OnRender()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	manager->draw();
 	SDL_GL_SwapWindow(window);
 }
@@ -48,7 +48,7 @@ bool Game::OnInit()
 	{
 		return false;
 	}
-	
+
 	//creates a window
 	if ((window = SDL_CreateWindow("SDL Render Clear", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL)) == NULL)
 	{
@@ -57,6 +57,19 @@ bool Game::OnInit()
 
 	//SDL opengl context
 	context = SDL_GL_CreateContext(window);
+
+	/* Configure the Open GL renderer */
+	/*Enable back face culling*/
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	/* Depth buffer setup */
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
+	glDepthRange(0.0, 1.0);
+	glClearDepth(1.0);
+
 	return true;
 }
 
@@ -74,6 +87,20 @@ bool Game::OnGlewInit()
 	return true;
 }
 
+bool Game::OnOpenglInit()
+{
+	/* Request opengl 3.3 context.*/
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+	/* Turn on double buffering with a 24bit Z buffer.
+	* You may need to change this to 16 or 32 for your system */
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+	return true;
+}
+
 bool Game::OnGameInit()
 {
 	manager = new Manager();
@@ -82,6 +109,11 @@ bool Game::OnGameInit()
 
 int Game::OnExecute()
 {
+	if (OnOpenglInit() == false)
+	{
+		return -1;
+	}
+
 	if(OnInit() == false)
 	{
 		return -1;
@@ -96,6 +128,8 @@ int Game::OnExecute()
 	{
 		return -1;
 	}
+
+	std::cerr << "CONTEXT: OpenGL v" << glGetString(GL_VERSION) << std::endl;
 
 	int start, end;
 	//primary run loop

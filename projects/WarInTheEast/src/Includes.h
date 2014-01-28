@@ -29,7 +29,7 @@
 #define Y_AXIS 1
 #define Z_AXIS 2 
 
-#define tNEAR  1.0f
+#define tNEAR  0.1f
 #define tFAR 2000.0f
 #define tFOVY 30.0f
 #define PI 3.141f

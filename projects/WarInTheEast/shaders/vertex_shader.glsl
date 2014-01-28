@@ -22,7 +22,8 @@ out vec2 ex_Texcoord;
 out vec4 ex_Color;
 
 void main () {
-	ex_Vertex = ((ViewMatrix * ModelMatrix) * in_Position);
+	mat4 ModelViewMatrix = ViewMatrix * ModelMatrix;
+	ex_Vertex = (ModelViewMatrix * in_Position);
 	ex_Normal = normalize(NormalMatrix * vec3(in_Normal));
 	//ex_Texcoord = vec2(in_Texture.x, 1.0-in_Texture.y);;
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_Position;

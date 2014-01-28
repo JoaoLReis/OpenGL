@@ -23,6 +23,7 @@ public:
 	bool OnInit();
 	bool OnGlewInit();
 	bool OnGameInit();
+	bool OnOpenglInit();
 	bool LoadContent();
 	bool OnEvent(SDL_Event* Event);
 	void OnLoop();

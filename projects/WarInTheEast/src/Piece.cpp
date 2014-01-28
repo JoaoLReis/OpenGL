@@ -71,7 +71,7 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 	glUniformMatrix4fv(unifID, 1, GL_TRUE, glm::value_ptr(modelMatrix));	
 	glUniformMatrix3fv(normalID, 1, GL_FALSE, glm::value_ptr(glm::mat3(glm::transpose(glm::inverse( viewMatrix * glm::transpose(modelMatrix))))));
 
-	glUniform3f(glGetUniformLocation(progID, "LightPosition"), 2.0, 0.0, 0.0);//2.0,0.0,0.0
+	glUniform3f(glGetUniformLocation(progID, "LightPosition"), 0.0, 0.0, -5.0);//2.0,0.0,0.0
 	glUniform2f(glGetUniformLocation(progID, "LightAttenuation"), 0.0f, 0.0005f);//0.0, 0.0
 	glUniform3f(glGetUniformLocation(progID, "AmbientLightColor"), 0.3f, 0.3f, 0.3f);//0.1,0.1,0.1
 	glUniform3f(glGetUniformLocation(progID, "LightDiffuseColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
