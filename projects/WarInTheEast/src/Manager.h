@@ -2,10 +2,10 @@
 
 #include "Includes.h"
 
-#include "Piece.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "PieceReader.h"
+#include "Tile.h"
 
 class Manager
 {

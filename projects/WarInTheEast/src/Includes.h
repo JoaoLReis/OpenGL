@@ -30,11 +30,14 @@
 #define Z_AXIS 2 
 
 #define tNEAR  0.1f
-#define tFAR 2000.0f
+#define tFAR 4000.0f
 #define tFOVY 30.0f
 #define PI 3.141f
 
 #define FRAMES_PER_SECOND 60
+
+#define NUMTILESX 30
+#define NUMTILESY 20
 
 /*static const glm::vec3 ligthpos = glm::vec3(0.0, 0.0, 5.0);
 

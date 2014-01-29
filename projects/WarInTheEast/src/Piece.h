@@ -22,6 +22,7 @@ private:
 	GLint unifID, normalID, uboID;
 
 public:
+	Piece();
 	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog);
 
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
