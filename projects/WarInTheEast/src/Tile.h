@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\utilizador\Desktop\João Luís\VisualStudio\Projects\TestOpenGL\projects\WarInTheEast\src\Piece.h"
+#include "Piece.h"
 
 enum type { BUILD, MOVEMENT, DEFAULT };
 
