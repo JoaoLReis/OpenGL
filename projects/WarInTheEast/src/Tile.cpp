@@ -12,7 +12,7 @@ Tile::Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* 
 
 }
 
-void Tile::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)
+/*void Tile::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)
 {
 	glm::mat4 modelMatrix = createModelMatrix();
 
@@ -45,7 +45,7 @@ void Tile::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 came
 
 	glUseProgram(0);
 	glBindVertexArray(0);
-}
+}*/
 
 std::vector<Tile*>* Tile::getAdj(){ return adj; }
 

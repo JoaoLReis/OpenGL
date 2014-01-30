@@ -20,6 +20,7 @@
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ShaderProgram.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
+    <ClCompile Include="..\src\TileGrid.cpp" />
     <ClCompile Include="..\src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +33,7 @@
     <ClInclude Include="..\src\Scene.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />
     <ClInclude Include="..\src\Tile.h" />
+    <ClInclude Include="..\src\TileGrid.h" />
     <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

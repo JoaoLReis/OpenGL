@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "PieceReader.h"
 #include "Tile.h"
+#include "TileGrid.h"
 
 class Manager
 {
