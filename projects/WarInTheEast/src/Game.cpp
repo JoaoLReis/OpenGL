@@ -58,16 +58,19 @@ bool Game::OnEvent(SDL_Event* Event)
 		}
 	}
 	else 
-	if (Event->type == SDL_MOUSEMOTION && DetectCameraMovement)
+	if (Event->type == SDL_MOUSEMOTION)
 	{
-		//Get the mouse coordinates 
+		//Update mouse coordinates 
 		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
 		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
-
-		manager->updateCameraPosition(x, y);
-		//manager->updateCameraRotation(x, y);	
-		return true;
+		if (DetectCameraMovement)
+		{
+			manager->updateCameraPosition(x, y);
+			//manager->updateCameraRotation(x, y);	
+			return true;
+		}
 	}
+
 	return false;
 }
 
