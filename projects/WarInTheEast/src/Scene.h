@@ -6,6 +6,7 @@
 
 class Scene
 {
+	int numIds;
 	std::vector<Piece*>* pieces;
 
 public:
@@ -15,6 +16,8 @@ public:
 
 	void addPiece(Piece *p)
 	{
+		numIds++;
+		p->setId(numIds);
 		pieces->push_back(p);
 	}
 

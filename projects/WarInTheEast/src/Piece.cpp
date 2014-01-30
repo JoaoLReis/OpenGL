@@ -82,6 +82,8 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 	glUniform3f(glGetUniformLocation(progID, "MaterialSpecularColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
 	glUniform1f(glGetUniformLocation(progID, "MaterialShininess"), 64.0f);//64.0f//22
 
+	//glStencilFunc(GL_ALWAYS, id, -1);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glDrawElementsBaseVertex(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0, 0);
 	
@@ -92,6 +94,11 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 void Piece::addIndex(unsigned int v)
 {
 	indices.push_back(v);
+}
+
+void Piece::setId(int v)
+{
+	id = v;
 }
 
 glm::mat4 Piece::createModelMatrix(){

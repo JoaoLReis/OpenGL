@@ -2,6 +2,7 @@
 
 Scene::Scene(std::vector<Piece*>* v)
 {
+	numIds = 0;
 	pieces = v;
 }
 

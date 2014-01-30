@@ -8,6 +8,7 @@ class Piece
 {
 
 protected:
+	int id;
 	glm::fquat orientation;
 	glm::mat4 scale;
 	glm::mat4 initTransformation;
@@ -28,6 +29,8 @@ public:
 	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
 	void createBufferObject();
 	void addIndex(unsigned int v);
+
+	void setId(int id);
 
 	glm::mat4 createModelMatrix();
 };
