@@ -24,7 +24,11 @@ void Manager::updateCameraRotation(float x, float y)
 
 void Manager::updateCameraPosition(float x, float y)
 {
-	camera->setCenter(glm::vec3(camera->getCenter().x + (-(x - camera->getLast_mx()) / -camera->getEye().z), camera->getCenter().y + (-(y - camera->getLast_my()) / -camera->getEye().z), camera->getCenter().z));
+	camera->setCenter(glm::vec3(camera->getCenter().x + ((x - camera->getLast_mx()) / -camera->getEye().z), camera->getCenter().y + ((y - camera->getLast_my()) / -camera->getEye().z), camera->getCenter().z));
+}
+
+void Manager::updateLastMXY(float x, float y)
+{
 	camera->setLast_mx(x);
 	camera->setLast_my(y);
 	camera->updateCamera();

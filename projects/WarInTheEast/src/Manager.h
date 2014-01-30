@@ -24,6 +24,7 @@ public:
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);
+	void updateLastMXY(float x, float y);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 

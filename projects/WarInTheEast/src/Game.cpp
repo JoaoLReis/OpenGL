@@ -23,8 +23,12 @@ void Game::OnRender()
 bool Game::OnEvent(SDL_Event* Event)
 {
 	static float x = 0.0f, y = 0.0f;
-
-	if(Event->type == SDL_QUIT)
+	if (Event->type == SDL_WINDOWEVENT_RESIZED)
+	{
+		glViewport(0, 0, Event->window.data1, Event->window.data2);
+	}
+	else
+	if (Event->type == SDL_QUIT)
 	{
 		Running = false;
 	}
@@ -42,13 +46,17 @@ bool Game::OnEvent(SDL_Event* Event)
 			if (DetectCameraMovement == true)
 			{
 				DetectCameraMovement = false;
+				/*SDL_SetRelativeMouseMode(SDL_bool(false));
+				return true;*/
+
 			}
 			else
 			{
 				DetectCameraMovement = true;
+				/*SDL_SetRelativeMouseMode(SDL_bool(true));
+				return true;*/
 			}
-			/*SDL_SetRelativeMouseMode(SDL_bool (true));
-			return true;*/
+
 		}
 		else
 		{
@@ -63,12 +71,16 @@ bool Game::OnEvent(SDL_Event* Event)
 		//Update mouse coordinates 
 		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
 		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
+		std::cout << "X-> " << x << std::endl;
+		std::cout << "Y-> " << y << std::endl;
 		if (DetectCameraMovement)
 		{
 			manager->updateCameraPosition(x, y);
+			manager->updateLastMXY(x, y);
 			//manager->updateCameraRotation(x, y);	
 			return true;
 		}
+		manager->updateLastMXY(x, y);
 	}
 
 	return false;
