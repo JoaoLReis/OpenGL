@@ -21,7 +21,9 @@ public:
 
 	void draw();
 	void initMapList();
-	void updateCameraRotation(int x, int y);
+	void updateCameraRotation(float x, float y);
+	void updateCameraPosition(float x, float y);
+	void updateCameraZoom(int amount);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 

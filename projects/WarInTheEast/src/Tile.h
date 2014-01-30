@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\utilizador\Desktop\João Luís\VisualStudio\Projects\TestOpenGL\projects\WarInTheEast\src\Piece.h"
+#include "Piece.h"
 
 enum type { BUILD, MOVEMENT, DEFAULT };
 
@@ -9,7 +9,6 @@ class Tile : public Piece
 	glm::vec3 pos;
 	//glm::vec2 id;
 	int type, oldtype;
-
 
 public:
 	Tile();
@@ -21,6 +20,7 @@ public:
 	int getOldType();	
 	int getId();
 
+	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
 	void setType(int newtype);
 	void addAdj(Tile* tile);
 

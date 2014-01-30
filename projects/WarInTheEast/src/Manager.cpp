@@ -4,20 +4,37 @@ Manager::Manager()
 {
 	camera = new Camera();
 	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR); 
-	camera->OffsetOrientation(glm::vec3(0.0, 1.0, 0.0), -45);
-	camera->OffsetOrientation(glm::vec3(1.0, 0.0, 0.0), 45);
+	//camera->OffsetOrientation(glm::vec3(0.0, 1.0, 0.0), -45);
+	//camera->OffsetOrientation(glm::vec3(1.0, 0.0, 0.0), 45);
+	camera->setEye(glm::vec3(0, 0, -40.0f));
+	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, camera->getCenter().z));
 	camera->updateCamera();
 	mapList = new std::vector<Scene*>;
 	initMapList();
 }
 
-void Manager::updateCameraRotation(int x, int y)
+void Manager::updateCameraRotation(float x, float y)
 {
 	camera->setRotationAngleY(camera->getRotationAngleY() + (x - camera->getLast_mx()));
 	camera->setRotationAngleX(camera->getRotationAngleX() + (y - camera->getLast_my()));
 	camera->setLast_mx(x);
 	camera->setLast_my(y);
 	camera->updateCamera();
+}
+
+void Manager::updateCameraPosition(float x, float y)
+{
+	camera->setCenter(glm::vec3(camera->getCenter().x + (-(x - camera->getLast_mx()) / -camera->getEye().z), camera->getCenter().y + (-(y - camera->getLast_my()) / -camera->getEye().z), camera->getCenter().z));
+	camera->setLast_mx(x);
+	camera->setLast_my(y);
+	camera->updateCamera();
+}
+
+void Manager::updateCameraZoom(int amount)
+{
+	if(amount > 0)
+		camera->setEye(glm::vec3(camera->getEye().x, camera->getEye().y, camera->getEye().z + 1));
+	else camera->setEye(glm::vec3(camera->getEye().x, camera->getEye().y, camera->getEye().z - 1));
 }
 
 void Manager::draw()
@@ -185,14 +202,10 @@ Scene *Manager::initMap1()
 			vs->push_back(vert);
 			vert.XYZW = glm::vec4(k+size, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
 			vs->push_back(vert);
-			vert.XYZW = glm::vec4(k+size, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 0
-			vs->push_back(vert);
 			vert.XYZW = glm::vec4(k+size, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 			vs->push_back(vert);
-			vert.XYZW = glm::vec4(k, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
-			vs->push_back(vert);
 
-			for (int j = 0; j < 6; j++)
+			for (int j = 0; j < 4; j++)
 			{
 				is->push_back(j);
 			}

@@ -7,7 +7,7 @@
 class Game
 {
 private:
-	bool Running;
+	bool Running, DetectCameraMovement;
 	SDL_Window* window;
 	SDL_GLContext context;
 	SDL_Event Event;

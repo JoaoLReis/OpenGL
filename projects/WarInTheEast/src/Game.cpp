@@ -4,6 +4,7 @@ Game::Game()
 {
 	window = NULL;
 	Running = true;
+	DetectCameraMovement = false;
 }
 
 //moving updates, math etc
@@ -21,22 +22,50 @@ void Game::OnRender()
 
 bool Game::OnEvent(SDL_Event* Event)
 {
+	static float x = 0.0f, y = 0.0f;
 
-	static int x = 0, y = 0;
 	if(Event->type == SDL_QUIT)
 	{
 		Running = false;
 	}
 	else
-	if (Event->type == SDL_MOUSEMOTION)
+	if (Event->type == SDL_MOUSEWHEEL)
+	{
+		manager->updateCameraZoom(Event->wheel.y);
+		
+	}
+	else
+	if (Event->type == SDL_MOUSEBUTTONDOWN)
+	{
+		if (Event->button.button == SDL_BUTTON_MIDDLE)
+		{
+			if (DetectCameraMovement == true)
+			{
+				DetectCameraMovement = false;
+			}
+			else
+			{
+				DetectCameraMovement = true;
+			}
+			/*SDL_SetRelativeMouseMode(SDL_bool (true));
+			return true;*/
+		}
+		else
+		{
+			DetectCameraMovement = false;
+			/*SDL_SetRelativeMouseMode(SDL_bool(false));
+			return true;*/
+		}
+	}
+	else 
+	if (Event->type == SDL_MOUSEMOTION && DetectCameraMovement)
 	{
 		//Get the mouse coordinates 
-		x = Event->motion.x - WINDOW_WIDTH / 2;
-		y = -(Event->motion.y - WINDOW_HEIGHT / 2);
+		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
+		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
 
-		std::cout << "Mouse->X : " << x << std::endl;
-		std::cout << "Mouse->Y : " << y << std::endl;
-		manager->updateCameraRotation(x, y);	
+		manager->updateCameraPosition(x, y);
+		//manager->updateCameraRotation(x, y);	
 		return true;
 	}
 	return false;
@@ -55,20 +84,23 @@ bool Game::OnInit()
 		return false;
 	}
 
-	//SDL opengl context
+	//Creates a SDL opengl context
 	context = SDL_GL_CreateContext(window);
 
-	/* Configure the Open GL renderer */
+	/* Configuration of the Open GL renderer */
 	/*Enable back face culling*/
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+	/*--------------------*/
+
 	/* Depth buffer setup */
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
 	glDepthRange(0.0, 1.0);
 	glClearDepth(1.0);
+	/*--------------------*/
 
 	return true;
 }
@@ -82,7 +114,6 @@ bool Game::OnGlewInit()
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-
 	}
 	return true;
 }
@@ -94,7 +125,7 @@ bool Game::OnOpenglInit()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	/* Turn on double buffering with a 24bit Z buffer.
-	* You may need to change this to 16 or 32 for your system */
+	* Note 16 bits or 24 is dependent on system */
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 

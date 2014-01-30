@@ -7,7 +7,7 @@
 class Piece
 {
 
-private:
+protected:
 	glm::fquat orientation;
 	glm::mat4 scale;
 	glm::mat4 initTransformation;
@@ -25,7 +25,7 @@ public:
 	Piece();
 	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog);
 
-	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
+	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
 	void createBufferObject();
 	void addIndex(unsigned int v);
 
