@@ -37,7 +37,7 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		for (int i = 0; i < indices.size(); i += 4)
 		{
-			glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, (void*)i);
+			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
 		glUseProgram(0);
 		glBindVertexArray(0);
