@@ -20,7 +20,8 @@ public:
 	int getOldType();	
 	int getId();
 
-	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
+	//virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
+	
 	void setType(int newtype);
 	void addAdj(Tile* tile);
 

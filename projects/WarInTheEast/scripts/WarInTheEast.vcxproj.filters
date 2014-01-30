@@ -75,6 +75,9 @@
     <ClCompile Include="..\src\Tile.cpp">
       <Filter>Source Files\Drawables</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TileGrid.cpp">
+      <Filter>Source Files\Drawables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Includes.h">
@@ -105,6 +108,9 @@
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Tile.h">
+      <Filter>Header Files\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TileGrid.h">
       <Filter>Header Files\Drawables</Filter>
     </ClInclude>
   </ItemGroup>

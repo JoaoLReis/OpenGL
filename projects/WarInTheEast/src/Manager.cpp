@@ -197,17 +197,24 @@ Scene *Manager::initMap1()
 	
 	Vertex vert = *(new Vertex());
 	float size = 1;
+	std::vector<Tile*> *totaltiles = new std::vector<Tile*>;
+	std::vector<Vertex> *tilevertexes = new std::vector<Vertex>;
+	std::vector<unsigned int> *tileindexes = new std::vector<unsigned int>;
 
 	for (int i = 0; i < NUMTILESY; i++){
 		for (int k = 0; k < NUMTILESX; k++){
 			vert.XYZW = glm::vec4(k, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
-			vs->push_back(vert);
+			vs->push_back(vert); 
+			tilevertexes->push_back(vert);
 			vert.XYZW = glm::vec4(k, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
 			vs->push_back(vert);
+			tilevertexes->push_back(vert);
 			vert.XYZW = glm::vec4(k+size, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
 			vs->push_back(vert);
+			tilevertexes->push_back(vert);
 			vert.XYZW = glm::vec4(k+size, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 			vs->push_back(vert);
+			tilevertexes->push_back(vert);
 
 			for (int j = 0; j < 4; j++)
 			{
@@ -216,13 +223,29 @@ Scene *Manager::initMap1()
 
 			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0));
 
-			ps->push_back(p);
+			totaltiles->push_back((Tile*)p);
+
 
 			vs->clear();
 			is->clear();
 		}
 	}
 
+	for (int l = 0; l < tilevertexes->size(); l++)
+	{
+		tileindexes->push_back(l);
+	}
+
+	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, totaltiles);
+	ps->push_back(tgrid);
+
+	totaltiles->clear();
+	tileindexes->clear();
+	tilevertexes->clear();
+
+	/*
+	+++++++++++++++++++++++++++++++++++++++++++++++           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	*/
 
 	return(new Scene(ps));
 }
