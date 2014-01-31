@@ -1,7 +1,7 @@
 #include "TileGrid.h"
 
 
-TileGrid::TileGrid(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, std::vector<Tile*>* totaltiles) : Piece(vs, is, prog)
+TileGrid::TileGrid(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, std::vector<Tile*> totaltiles, int ident) : Piece(vs, is, prog, ident)
 {
 	tiles = totaltiles;
 }
@@ -32,11 +32,12 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		glUniform3f(glGetUniformLocation(progID, "MaterialDiffuseColor"), 0.9f, 0.9f, 0.9f);//0.9,0.1,0.1
 		glUniform3f(glGetUniformLocation(progID, "MaterialSpecularColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
 		glUniform1f(glGetUniformLocation(progID, "MaterialShininess"), 64.0f);//64.0f//22
-
+		
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		for (int i = 0; i < indices.size(); i += 4)
 		{
+			glUniform1i(glGetUniformLocation(progID, "selected"), getTile(i / 4)->isSelected());
 			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
 		glUseProgram(0);
@@ -44,14 +45,19 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 	
 }
 
-std::vector<Tile*>* TileGrid::getTiles()
+std::vector<Tile*> TileGrid::getTiles()
 {
 	return tiles;
 }
 
 void TileGrid::addTile(Tile* tile)
 {
-	tiles->push_back(tile);
+	tiles.push_back(tile);
+}
+
+Tile* TileGrid::getTile(int index)
+{
+	return tiles.at(index);
 }
 
 TileGrid::~TileGrid()

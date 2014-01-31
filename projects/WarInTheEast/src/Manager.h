@@ -29,5 +29,7 @@ public:
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 
+	Scene* getScene();
+
 	Scene *initMap1();
 };

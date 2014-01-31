@@ -12,6 +12,8 @@ uniform vec3 MaterialDiffuseColor;
 uniform vec3 MaterialSpecularColor;
 uniform float MaterialShininess;
 
+uniform bool selected;
+
 layout(std140) uniform SharedMatrices
 {
 	mat4 ViewMatrix;
@@ -53,6 +55,8 @@ void main(void)
 
 	float attenuation = 1 / (1.0 +LightAttenuation.x * Ldist + LightAttenuation.y * pow(Ldist,2));
 	
-	colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * ex_Color;
-	//colorOut = ex_Color;
+	if(!selected)
+		colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * ex_Color;
+	else
+		colorOut = ex_Color;
 }

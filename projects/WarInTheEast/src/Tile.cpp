@@ -1,14 +1,15 @@
 #include "Tile.h"
 #include "Piece.h"
 
-Tile::Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position)
-	: Piece(vs, is, prog)
+Tile::Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position, int ident)
+	: Piece(vs, is, prog, ident)
 {
 
 	adj = new std::vector<Tile*>;
 	type = DEFAULT;
 	oldtype = DEFAULT;
 	pos = position;
+	selected = false;
 
 }
 
@@ -64,6 +65,11 @@ void Tile::setType(int newtype)
 void Tile::addAdj(Tile* tile)
 {
 	adj->push_back(tile);
+}
+
+bool Tile::isSelected()
+{
+	return selected;
 }
 
 Tile::~Tile()

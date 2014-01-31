@@ -1,7 +1,8 @@
 #include "Piece.h"
 
-Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog)
+Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, int ident)
 {
+	id = ident;
 	vertexes = vs;
 	indices = is;
 	shaderProg = prog;
@@ -96,6 +97,11 @@ void Piece::addIndex(unsigned int v)
 	indices.push_back(v);
 }
 
+int Piece::getID()
+{
+	return id;
+}
+
 void Piece::setId(int v)
 {
 	id = v;
@@ -103,4 +109,15 @@ void Piece::setId(int v)
 
 glm::mat4 Piece::createModelMatrix(){
 	return  initTransformation  * glm::mat4_cast(orientation)* scale * transformation;
+}
+
+void Piece::setColor()
+{
+	for (std::vector<Vertex>::iterator it = vertexes.begin(); it != vertexes.end(); ++it)
+	{
+		it->RGBA[0] = 0.5;
+		it->RGBA[1] = 0.5;
+		it->RGBA[2] = 0.5;
+
+	}
 }

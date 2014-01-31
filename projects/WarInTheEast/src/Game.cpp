@@ -58,6 +58,14 @@ bool Game::OnEvent(SDL_Event* Event)
 			}
 
 		}
+		if (Event->button.button == SDL_BUTTON_LEFT)
+		{
+			DetectCameraMovement = false;
+			GLuint updatedPixel;
+			glReadPixels(x, WINDOW_HEIGHT - -(Event->motion.y - WINDOW_HEIGHT / 2.0f) , 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
+			manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
+
+		}
 		else
 		{
 			DetectCameraMovement = false;
@@ -117,6 +125,11 @@ bool Game::OnInit()
 	glClearDepth(1.0);
 	/*--------------------*/
 
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	/*--------------------*/
+	
 	return true;
 }
 

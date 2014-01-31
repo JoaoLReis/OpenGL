@@ -71,6 +71,7 @@ void Manager::initMapList()
 Scene *Manager::initMap1()
 {
 	Piece* p;
+	int globalID = 1;
 	PieceReader::getInstance().init();
 	std::vector<Piece*> *ps = new std::vector<Piece*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
@@ -221,7 +222,7 @@ Scene *Manager::initMap1()
 				is->push_back(j);
 			}
 
-			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0));
+			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0), globalID++);
 
 			totaltiles->push_back((Tile*)p);
 
@@ -236,7 +237,7 @@ Scene *Manager::initMap1()
 		tileindexes->push_back(l);
 	}
 
-	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, totaltiles);
+	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, *totaltiles, 0);
 	ps->push_back(tgrid);
 
 	totaltiles->clear();
@@ -248,5 +249,10 @@ Scene *Manager::initMap1()
 	*/
 
 	return(new Scene(ps));
+}
+
+Scene* Manager::getScene()
+{
+	return activeScene;
 }
 

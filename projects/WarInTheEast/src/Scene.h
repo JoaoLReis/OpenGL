@@ -3,6 +3,7 @@
 #include "Includes.h"
 #include "ShaderProgram.h"
 #include "Piece.h"
+#include "TileGrid.h"
 
 class Scene
 {
@@ -14,12 +15,12 @@ public:
 	
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraCenter);
 
-	void addPiece(Piece *p)
-	{
-		numIds++;
-		p->setId(numIds);
-		pieces->push_back(p);
-	}
+	void addPiece(Piece *p);
+
+	Piece* getPiece(int index);
+
+//WARNING!! -> HAS TILEGRID MUST BE THE FIRST IN THE VECTOR
+	TileGrid* getTileGrid();
 
 	~Scene();
 };

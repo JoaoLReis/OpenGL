@@ -9,16 +9,18 @@ class Tile : public Piece
 	glm::vec3 pos;
 	//glm::vec2 id;
 	int type, oldtype;
+	bool selected;
 
 public:
 	Tile();
-	Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position);
+	Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position, int ident);
 
 	std::vector<Tile*>* getAdj();
 	glm::vec3 getPos();
 	int getType();
 	int getOldType();	
 	int getId();
+	bool isSelected();
 
 	//virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
 	
