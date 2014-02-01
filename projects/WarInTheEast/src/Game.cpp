@@ -61,9 +61,14 @@ bool Game::OnEvent(SDL_Event* Event)
 		if (Event->button.button == SDL_BUTTON_LEFT)
 		{
 			DetectCameraMovement = false;
-			GLuint updatedPixel;
-			glReadPixels(x, WINDOW_HEIGHT - -(Event->motion.y - WINDOW_HEIGHT / 2.0f) , 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
-			manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
+			GLuint updatedPixel = 285;
+			glReadPixels(Event->motion.x, Event->motion.y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
+			std::cout << "Event->motion.x" << Event->motion.x << std::endl;
+			std::cout << "Event->motion.y" << Event->motion.y << std::endl;
+			std::cout << updatedPixel << std::endl;
+
+			if (updatedPixel!= 0)
+				manager->getScene()->getTileGrid()->getTile(updatedPixel)->changeSelected();
 
 		}
 		else
@@ -79,8 +84,8 @@ bool Game::OnEvent(SDL_Event* Event)
 		//Update mouse coordinates 
 		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
 		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
-		std::cout << "X-> " << x << std::endl;
-		std::cout << "Y-> " << y << std::endl;
+		//std::cout << "X-> " << x << std::endl;
+		//std::cout << "Y-> " << y << std::endl;
 		if (DetectCameraMovement)
 		{
 			manager->updateCameraPosition(x, y);
@@ -99,6 +104,11 @@ bool Game::OnInit()
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		return false;
+	}
+
+	if (OnOpenglInit() == false)
+	{
+		return -1;
 	}
 
 	//creates a window
@@ -148,14 +158,17 @@ bool Game::OnGlewInit()
 
 bool Game::OnOpenglInit()
 {
+	int i = 1;
 	/* Request opengl 3.3 context.*/
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	/* Turn on double buffering with a 24bit Z buffer.
 	* Note 16 bits or 24 is dependent on system */
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	return true;
 }
@@ -168,11 +181,6 @@ bool Game::OnGameInit()
 
 int Game::OnExecute()
 {
-	if (OnOpenglInit() == false)
-	{
-		return -1;
-	}
-
 	if(OnInit() == false)
 	{
 		return -1;

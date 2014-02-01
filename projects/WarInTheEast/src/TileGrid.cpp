@@ -38,6 +38,7 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		for (int i = 0; i < indices.size(); i += 4)
 		{
 			glUniform1i(glGetUniformLocation(progID, "selected"), getTile(i / 4)->isSelected());
+			glStencilFunc(GL_ALWAYS, getTile(i / 4)->getID(), -1);
 			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
 		glUseProgram(0);

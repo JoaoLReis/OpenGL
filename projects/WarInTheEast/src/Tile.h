@@ -21,6 +21,7 @@ public:
 	int getOldType();	
 	int getId();
 	bool isSelected();
+	void changeSelected();
 
 	//virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
 	

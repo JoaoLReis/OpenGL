@@ -10,7 +10,7 @@ void Scene::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 {
 	for (std::vector<Piece*>::iterator it = pieces->begin() ; it != pieces->end(); ++it)
 	{
-		glStencilFunc(GL_ALWAYS, (*it)->getID(), -1);
+		//glStencilFunc(GL_ALWAYS, (*it)->getID(), -1);
 		(*it)->draw(viewMatrix, projectionMatrix, cameraCenter);
 	}
 }

@@ -72,6 +72,13 @@ bool Tile::isSelected()
 	return selected;
 }
 
+void Tile::changeSelected()
+{
+	if (selected)
+		selected = false;
+	else selected = true;
+}
+
 Tile::~Tile()
 {
 }
