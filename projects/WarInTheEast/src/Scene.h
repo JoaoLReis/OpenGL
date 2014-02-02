@@ -7,17 +7,18 @@
 
 class Scene
 {
-	int numIds;
+	int globalId;
 	std::vector<Piece*>* pieces;
 
 public:
 	Scene(std::vector<Piece*>* v);
 	
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraCenter);
-
 	void addPiece(Piece *p);
 
 	Piece* getPiece(int index);
+
+	int getId();
 
 //WARNING!! -> HAS TILEGRID MUST BE THE FIRST IN THE VECTOR
 	TileGrid* getTileGrid();

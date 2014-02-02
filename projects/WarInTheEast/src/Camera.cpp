@@ -2,12 +2,11 @@
 
 Camera::Camera()
 {
-	eye = glm::vec3(0,0,-5);
-	center = glm::vec3(0,0,0);
+	center = glm::vec3(0,0,-5);
 	last_mx = 0, last_my = 0;
 	RotationAngleX = 0;
 	RotationAngleY = 0;
-	createViewMatrix(0, 0, -20, 0, 0, 0);
+	createViewMatrix(0, 0, -5);
 }
 
 void Camera::setPerspective(float fovy, float aspect, float zNear, float zFar) 
@@ -38,19 +37,16 @@ void Camera::OffsetOrientation(const glm::vec3 &_axis, float fAngDeg)
 
 glm::vec3 Camera::computeCameraCenter()
 {
-	glm::vec3 r = glm::vec3(glm::vec4(eye, 0.0) * glm::mat4_cast(orientation));
+	glm::vec3 r = glm::vec3(glm::vec4(center.x, center.y, center.z, 0.0) * glm::mat4_cast(orientation));
 	return glm::vec3(-r.x, -r.y, -r.z);
 }
 
-void Camera::createViewMatrix(float eyex, float eyey, float eyez, float centerx, float centery, float centerz)
+void Camera::createViewMatrix( float centerx, float centery, float centerz)
 {
-	eye.x = eyex;
-	eye.y = eyey;
-	eye.z = eyez;
 	OffsetOrientation(glm::vec3(1.0f, 0.0f, 0.0f),RotationAngleX);
 	OffsetOrientation(glm::vec3(0.0f, 1.0f, 0.0f),RotationAngleY);
-	glm::mat4 T = glm::translate(glm::mat4(1.f), glm::vec3(eyex, eyey, eyez));
-	glm::mat4 C = glm::translate(glm::mat4(1.f), glm::vec3(centerx, centery, centerz));
+	glm::mat4 T = glm::translate(glm::mat4(1.f), glm::vec3(0.0, 0.0, centerz));
+	glm::mat4 C = glm::translate(glm::mat4(1.f), glm::vec3(centerx, centery, 0.0));
 	ViewMatrix = T*glm::mat4_cast(orientation)*C;
 	RotationAngleX = 0;
 	RotationAngleY = 0;
@@ -59,16 +55,10 @@ void Camera::createViewMatrix(float eyex, float eyey, float eyez, float centerx,
 
 void Camera::updateCamera()
 {
-	createViewMatrix(eye.x, eye.y, eye.z, center.x, center.y, center.z);
+	createViewMatrix(center.x, center.y, center.z);
 }
 
 //Setters
-void Camera::setEye(glm::vec3 v)
-{
-	eye = v;
-	updateCamera();
-}
-
 void Camera::setCenter(glm::vec3 v)
 {
 	center = v;
@@ -106,12 +96,6 @@ glm::mat4 Camera::getOrientation()
 	return glm::mat4_cast(orientation);
 }
 
-glm::vec3 Camera::getEye() 
-{
-	return eye;
-}
-
-
 int Camera::getLast_mx() 
 {
 	return last_mx;
@@ -140,6 +124,11 @@ float Camera::getRotationAngleX()
 float Camera::getRotationAngleY()
 {
 	return RotationAngleY;
+}
+
+glm::fquat Camera::getQuatOrientation()
+{
+	return orientation;
 }
 
 //Destructor

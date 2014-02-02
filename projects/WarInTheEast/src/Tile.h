@@ -7,7 +7,7 @@ class Tile : public Piece
 {
 	std::vector<Tile*>* adj;
 	glm::vec3 pos;
-	//glm::vec2 id;
+	
 	int type, oldtype;
 	bool selected;
 
@@ -20,9 +20,8 @@ public:
 	int getType();
 	int getOldType();	
 	int getId();
+	void setSelected();
 	bool isSelected();
-
-	//virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye);
 	
 	void setType(int newtype);
 	void addAdj(Tile* tile);

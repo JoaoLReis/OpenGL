@@ -7,6 +7,25 @@ Game::Game()
 	DetectCameraMovement = false;
 }
 
+bool  Game::isOpenGLError() {
+	bool isError = false;
+	GLenum errCode;
+	const GLubyte *errString;
+	while ((errCode = glGetError()) != GL_NO_ERROR) {
+		isError = true;
+		std::cerr << "OpenGL ERROR [" << errCode << "]." << std::endl;
+	}
+	return isError;
+}
+
+void Game::checkOpenGLError(std::string error)
+{
+	if (isOpenGLError()) {
+		std::cerr << error << std::endl;
+		exit(EXIT_FAILURE);
+	}
+}
+
 //moving updates, math etc
 void Game::OnLoop()
 {
@@ -36,7 +55,6 @@ bool Game::OnEvent(SDL_Event* Event)
 	if (Event->type == SDL_MOUSEWHEEL)
 	{
 		manager->updateCameraZoom(Event->wheel.y);
-		
 	}
 	else
 	if (Event->type == SDL_MOUSEBUTTONDOWN)
@@ -48,7 +66,6 @@ bool Game::OnEvent(SDL_Event* Event)
 				DetectCameraMovement = false;
 				/*SDL_SetRelativeMouseMode(SDL_bool(false));
 				return true;*/
-
 			}
 			else
 			{
@@ -56,15 +73,18 @@ bool Game::OnEvent(SDL_Event* Event)
 				/*SDL_SetRelativeMouseMode(SDL_bool(true));
 				return true;*/
 			}
-
 		}
+		else
 		if (Event->button.button == SDL_BUTTON_LEFT)
 		{
 			DetectCameraMovement = false;
-			GLuint updatedPixel;
-			glReadPixels(x, WINDOW_HEIGHT - -(Event->motion.y - WINDOW_HEIGHT / 2.0f) , 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
-			manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
-
+			//GLuint updatedPixel = 1;
+			//manager->treatTileSetPicking(Event->motion.x, Event->motion.y);
+			//glReadPixels(Event->motion.x, WINDOW_HEIGHT - Event->motion.y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
+			manager->tilesRayPick(Event->motion.x, Event->motion.y);
+		
+			//manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
+			return true;
 		}
 		else
 		{
@@ -79,6 +99,7 @@ bool Game::OnEvent(SDL_Event* Event)
 		//Update mouse coordinates 
 		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
 		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
+		
 		std::cout << "X-> " << x << std::endl;
 		std::cout << "Y-> " << y << std::endl;
 		if (DetectCameraMovement)
@@ -101,8 +122,13 @@ bool Game::OnInit()
 		return false;
 	}
 
+	if (OnOpenglInit() == false)
+	{
+		return false;
+	}
+
 	//creates a window
-	if ((window = SDL_CreateWindow("SDL Render Clear", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL)) == NULL)
+	if ((window = SDL_CreateWindow("SDL Render Clear", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE)) == NULL)
 	{
 		return false;
 	}
@@ -125,9 +151,10 @@ bool Game::OnInit()
 	glClearDepth(1.0);
 	/*--------------------*/
 
+	/* Stencil buffer setup */
 	glEnable(GL_STENCIL_TEST);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
+	glClearStencil(0.0);
 	/*--------------------*/
 	
 	return true;
@@ -149,13 +176,16 @@ bool Game::OnGlewInit()
 bool Game::OnOpenglInit()
 {
 	/* Request opengl 3.3 context.*/
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	/* Turn on double buffering with a 24bit Z buffer.
 	* Note 16 bits or 24 is dependent on system */
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+	/* Sets stencil buffer to 8 bit */
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	return true;
 }
@@ -168,11 +198,6 @@ bool Game::OnGameInit()
 
 int Game::OnExecute()
 {
-	if (OnOpenglInit() == false)
-	{
-		return -1;
-	}
-
 	if(OnInit() == false)
 	{
 		return -1;
@@ -195,14 +220,15 @@ int Game::OnExecute()
 	while(Running)
 	{
 		start = SDL_GetTicks();
-		while(SDL_PollEvent(&Event))
+
+		OnLoop();
+		OnRender();
+
+		while (SDL_PollEvent(&Event))
 		{
 			if (OnEvent(&Event))
 				break;
 		}
-
-		OnLoop();
-		OnRender();
 
 		end = SDL_GetTicks() - start;
 		if(end < 1000 / FRAMES_PER_SECOND)

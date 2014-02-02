@@ -6,11 +6,52 @@ Manager::Manager()
 	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR); 
 	//camera->OffsetOrientation(glm::vec3(0.0, 1.0, 0.0), -45);
 	//camera->OffsetOrientation(glm::vec3(1.0, 0.0, 0.0), 45);
-	camera->setEye(glm::vec3(0, 0, -40.0f));
-	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, camera->getCenter().z));
+	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, -40.0f));
 	camera->updateCamera();
 	mapList = new std::vector<Scene*>;
 	initMapList();
+}
+
+void Manager::tilesRayPick(float x, float y)
+{
+	glm::vec3 center = camera->computeCameraCenter();
+	glm::vec3 view = glm::vec3(center.x, center.y, 0.0) - glm::vec3(center.x, center.y, center.z);
+	view = glm::normalize(view);
+
+	glm::fquat camQuat = camera->getQuatOrientation();
+	glm::fquat camQuatConj = glm::conjugate(camQuat);
+
+	glm::vec3 camUp = glm::vec3(camQuat * glm::vec4(0.0, 1.0f, 0.0, 1.0) * camQuatConj);
+	glm::vec3 camDir = glm::vec3(camQuat * glm::vec3(0.0, 0.0f, -1.0) * camQuatConj);
+
+	glm::vec3 h = glm::cross(view, camUp);
+	h = glm::normalize(h);
+
+	glm::vec3 v = glm::cross(h, view);
+	v = glm::normalize(v);
+
+	float radFov = (tFOVY * PI) / 180.0f;
+
+	//Length on the viewport system
+	float vLength = std::tan(radFov / 2) * (center.z);
+	float hLength = vLength * (WINDOW_WIDTH / WINDOW_HEIGHT);
+
+	v = v * vLength;
+	h = h * hLength;
+
+	x -= WINDOW_WIDTH / 2;
+	y = - (y- WINDOW_HEIGHT / 2);
+
+	x /= (WINDOW_WIDTH / 2);
+	y /= (WINDOW_HEIGHT / 2);
+
+	glm::vec3 pos = center +  view*tNEAR + h*x + v*y;
+
+	std::cout << "MOUSE at -> " << pos.x << " "<< pos.y << " "<< pos.z << std::endl;
+	glm::vec3 dir = pos - center;
+	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
+	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
+		activeScene->getTileGrid()->getTile(index)->setSelected();
 }
 
 void Manager::updateCameraRotation(float x, float y)
@@ -24,7 +65,7 @@ void Manager::updateCameraRotation(float x, float y)
 
 void Manager::updateCameraPosition(float x, float y)
 {
-	camera->setCenter(glm::vec3(camera->getCenter().x + ((x - camera->getLast_mx()) / -camera->getEye().z), camera->getCenter().y + ((y - camera->getLast_my()) / -camera->getEye().z), camera->getCenter().z));
+	camera->setCenter(glm::vec3(camera->getCenter().x + ((x - camera->getLast_mx()) / -camera->getCenter().z), camera->getCenter().y + ((y - camera->getLast_my()) / -camera->getCenter().z), camera->getCenter().z));
 }
 
 void Manager::updateLastMXY(float x, float y)
@@ -37,8 +78,8 @@ void Manager::updateLastMXY(float x, float y)
 void Manager::updateCameraZoom(int amount)
 {
 	if(amount > 0)
-		camera->setEye(glm::vec3(camera->getEye().x, camera->getEye().y, camera->getEye().z + 1));
-	else camera->setEye(glm::vec3(camera->getEye().x, camera->getEye().y, camera->getEye().z - 1));
+		camera->setCenter(glm::vec3(camera->getCenter().x, camera->getCenter().y, camera->getCenter().z + 1));
+	else camera->setCenter(glm::vec3(camera->getCenter().x, camera->getCenter().y, camera->getCenter().z - 1));
 }
 
 void Manager::draw()
@@ -71,11 +112,11 @@ void Manager::initMapList()
 Scene *Manager::initMap1()
 {
 	Piece* p;
-	int globalID = 1;
 	PieceReader::getInstance().init();
 	std::vector<Piece*> *ps = new std::vector<Piece*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
 	std::vector<unsigned int> *is = new std::vector<unsigned int>;
+	Scene* scene = new Scene(ps);
 	ShaderProgram *shProg = createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl");
 
 	/*
@@ -207,25 +248,26 @@ Scene *Manager::initMap1()
 			vert.XYZW = glm::vec4(k, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
 			vs->push_back(vert); 
 			tilevertexes->push_back(vert);
-			vert.XYZW = glm::vec4(k, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+			vert.XYZW = glm::vec4(k + size, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
-			vert.XYZW = glm::vec4(k+size, i-size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+			vert.XYZW = glm::vec4(k + size, i + size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
-			vert.XYZW = glm::vec4(k+size, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+			vert.XYZW = glm::vec4(k, i+size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
+
+
 
 			for (int j = 0; j < 4; j++)
 			{
 				is->push_back(j);
 			}
 
-			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0), globalID++);
+			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0), scene->getId());
 
 			totaltiles->push_back((Tile*)p);
-
 
 			vs->clear();
 			is->clear();
@@ -248,7 +290,7 @@ Scene *Manager::initMap1()
 	+++++++++++++++++++++++++++++++++++++++++++++++           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	*/
 
-	return(new Scene(ps));
+	return(scene);
 }
 
 Scene* Manager::getScene()

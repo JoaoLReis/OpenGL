@@ -28,5 +28,9 @@ public:
 	bool OnEvent(SDL_Event* Event);
 	void OnLoop();
 	void OnRender();
+
+	bool isOpenGLError();
+	void checkOpenGLError(std::string error);
+
 	void Cleanup();
 };

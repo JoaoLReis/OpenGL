@@ -8,7 +8,6 @@ TileGrid::TileGrid(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderP
 
 void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)
 {
-	
 		glm::mat4 modelMatrix = createModelMatrix();
 
 		glBindBuffer(GL_UNIFORM_BUFFER, VboId[1]);
@@ -32,17 +31,16 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		glUniform3f(glGetUniformLocation(progID, "MaterialDiffuseColor"), 0.9f, 0.9f, 0.9f);//0.9,0.1,0.1
 		glUniform3f(glGetUniformLocation(progID, "MaterialSpecularColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
 		glUniform1f(glGetUniformLocation(progID, "MaterialShininess"), 64.0f);//64.0f//22
-		
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		for (int i = 0; i < indices.size(); i += 4)
+		for (int i = 0, numT = 0; i < indices.size(); i += 4, numT++)
 		{
-			glUniform1i(glGetUniformLocation(progID, "selected"), getTile(i / 4)->isSelected());
+
+			glUniform1i(glGetUniformLocation(progID, "selected"), getTile(numT)->isSelected());
 			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
 		glUseProgram(0);
 		glBindVertexArray(0);
-	
 }
 
 std::vector<Tile*> TileGrid::getTiles()
