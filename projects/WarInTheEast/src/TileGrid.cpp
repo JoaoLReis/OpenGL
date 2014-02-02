@@ -31,7 +31,7 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		glUniform3f(glGetUniformLocation(progID, "MaterialDiffuseColor"), 0.9f, 0.9f, 0.9f);//0.9,0.1,0.1
 		glUniform3f(glGetUniformLocation(progID, "MaterialSpecularColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
 		glUniform1f(glGetUniformLocation(progID, "MaterialShininess"), 64.0f);//64.0f//22
-
+		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		for (int i = 0, numT = 0; i < indices.size(); i += 4, numT++)
 		{

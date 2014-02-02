@@ -82,7 +82,7 @@ bool Game::OnEvent(SDL_Event* Event)
 			//manager->treatTileSetPicking(Event->motion.x, Event->motion.y);
 			//glReadPixels(Event->motion.x, WINDOW_HEIGHT - Event->motion.y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
 			manager->tilesRayPick(Event->motion.x, Event->motion.y);
-		
+
 			//manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
 			return true;
 		}
@@ -99,9 +99,8 @@ bool Game::OnEvent(SDL_Event* Event)
 		//Update mouse coordinates 
 		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
 		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
-		
-		std::cout << "X-> " << x << std::endl;
-		std::cout << "Y-> " << y << std::endl;
+		//std::cout << "X-> " << x << std::endl;
+		//std::cout << "Y-> " << y << std::endl;
 		if (DetectCameraMovement)
 		{
 			manager->updateCameraPosition(x, y);

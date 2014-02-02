@@ -22,7 +22,7 @@ public:
 	int getId();
 	void setSelected();
 	bool isSelected();
-	
+
 	void setType(int newtype);
 	void addAdj(Tile* tile);
 
