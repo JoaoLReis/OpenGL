@@ -39,6 +39,6 @@ public:
 	void setPerspective(float fovy, float aspect, float zNear, float zFar);
 	void setOrtogonal(float Left, float  Right, float Top, float Bottom, float Near, float Far);
 	void createViewMatrix(float centerx, float centery, float centerz);
-	void OffsetOrientation(const glm::vec3 &_axis, float fAngDeg);
+	void OffsetOrientation(glm::vec3 &_axis, float fAngDeg);
 };
 

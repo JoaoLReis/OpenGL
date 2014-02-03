@@ -14,41 +14,31 @@ Manager::Manager()
 
 void Manager::tilesRayPick(float x, float y)
 {
-	glm::vec3 center = camera->computeCameraCenter();
-	glm::vec3 view = glm::vec3(center.x, center.y, 0.0) - glm::vec3(center.x, center.y, center.z);
-	view = glm::normalize(view);
+	glm::vec2 mouse;
 
-	glm::fquat camQuat = camera->getQuatOrientation();
-	glm::fquat camQuatConj = glm::conjugate(camQuat);
+	mouse.x = x- WINDOW_WIDTH / 2;
+	mouse.y = -(y - WINDOW_HEIGHT / 2);
 
-	glm::vec3 camUp = glm::vec3(camQuat * glm::vec4(0.0, 1.0f, 0.0, 1.0) * camQuatConj);
-	glm::vec3 camDir = glm::vec3(camQuat * glm::vec3(0.0, 0.0f, -1.0) * camQuatConj);
+	mouse.x /= (WINDOW_WIDTH / 2);
+	mouse.y /= (WINDOW_HEIGHT / 2);
 
-	glm::vec3 h = glm::cross(view, camUp);
-	h = glm::normalize(h);
+	glm::mat4 toWorld = glm::inverse(camera->getProjectionMatrix() * camera->getViewMatrix());
 
-	glm::vec3 v = glm::cross(h, view);
-	v = glm::normalize(v);
+	glm::vec4 from = toWorld * glm::vec4(mouse, -1.0f, 1.0f);
+	glm::vec4 to = toWorld * glm::vec4(mouse, 1.0f, 1.0f);
 
-	float radFov = (tFOVY * PI) / 180.0f;
+	from /= from.w; //perspective divide ("normalize" homogeneous coordinates)
+	to /= to.w;
 
-	//Length on the viewport system
-	float vLength = std::tan(radFov / 2) * (center.z);
-	float hLength = vLength * (WINDOW_WIDTH / WINDOW_HEIGHT);
+	glm::vec3 direction = glm::vec3(to - from);
 
-	v = v * vLength;
-	h = h * hLength;
-
-	x -= WINDOW_WIDTH / 2;
-	y = - (y- WINDOW_HEIGHT / 2);
-
-	x /= (WINDOW_WIDTH / 2);
-	y /= (WINDOW_HEIGHT / 2);
-
-	glm::vec3 pos = center +  view*tNEAR + h*x + v*y;
-
+	//intersectionWith Z = 0
+	float s = -from.z / direction.z;
+	glm::vec3 pos;
+	pos.x = from.x + direction.x * s;
+	pos.y = from.y + direction.y * s;
 	std::cout << "MOUSE at -> " << pos.x << " "<< pos.y << " "<< pos.z << std::endl;
-	glm::vec3 dir = pos - center;
+
 	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
 	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
 		activeScene->getTileGrid()->getTile(index)->setSelected();
@@ -65,7 +55,8 @@ void Manager::updateCameraRotation(float x, float y)
 
 void Manager::updateCameraPosition(float x, float y)
 {
-	camera->setCenter(glm::vec3(camera->getCenter().x + ((x - camera->getLast_mx()) / -camera->getCenter().z), camera->getCenter().y + ((y - camera->getLast_my()) / -camera->getCenter().z), camera->getCenter().z));
+	updateCameraRotation(x, y);
+	//camera->setCenter(glm::vec3(camera->getCenter().x + ((x - camera->getLast_mx()) / -camera->getCenter().z), camera->getCenter().y + ((y - camera->getLast_my()) / -camera->getCenter().z), camera->getCenter().z));
 }
 
 void Manager::updateLastMXY(float x, float y)

@@ -19,7 +19,7 @@ void Camera::setOrtogonal(float Left, float  Right, float Top, float Bottom, flo
 	ProjectionMatrix = glm::ortho(Left, Right, Top, Bottom, Near, Far); 
 }
 
-void Camera::OffsetOrientation(const glm::vec3 &_axis, float fAngDeg)
+void Camera::OffsetOrientation(glm::vec3 &_axis, float fAngDeg)
 {
 	float fAngRad = glm::radians(fAngDeg);
     
@@ -27,11 +27,16 @@ void Camera::OffsetOrientation(const glm::vec3 &_axis, float fAngDeg)
     
     axis = axis * sinf(fAngRad / 2.0f);
     float scalar = cosf(fAngRad / 2.0f);
-    
-    glm::fquat offset(scalar, axis.x, axis.y, axis.z);
-    
-    orientation = offset * orientation;
-    
+
+	glm::fquat offset; 
+
+	offset = glm::fquat(scalar, axis.x, axis.y, axis.z);
+
+	if (_axis.x == 1.0f)
+	{
+		orientation = offset * orientation ;
+	}
+	else orientation = orientation * offset;
     orientation = glm::normalize(orientation);
 }
 
@@ -44,7 +49,7 @@ glm::vec3 Camera::computeCameraCenter()
 void Camera::createViewMatrix( float centerx, float centery, float centerz)
 {
 	OffsetOrientation(glm::vec3(1.0f, 0.0f, 0.0f),RotationAngleX);
-	OffsetOrientation(glm::vec3(0.0f, 1.0f, 0.0f),RotationAngleY);
+	OffsetOrientation(glm::vec3(0.0f, 0.0f, 1.0f),RotationAngleY);
 	glm::mat4 T = glm::translate(glm::mat4(1.f), glm::vec3(0.0, 0.0, centerz));
 	glm::mat4 C = glm::translate(glm::mat4(1.f), glm::vec3(centerx, centery, 0.0));
 	ViewMatrix = T*glm::mat4_cast(orientation)*C;
