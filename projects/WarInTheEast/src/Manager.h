@@ -26,11 +26,15 @@ public:
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);
 	void updateLastMXY(float x, float y);
-	void tilesRayPick(float x, float y);
+	float tilesRayPick(float x, float y);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 
 	Scene* getScene();
 
 	Scene *initMap1();
+
+	//TODO
+	void saveTileGrid();
+	void loadTileGrid();
 };

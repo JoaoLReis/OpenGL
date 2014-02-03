@@ -7,7 +7,6 @@ Tile::Tile(glm::vec3 position)
 	type = DEFAULT;
 	oldtype = DEFAULT;
 	pos = position;
-	selected = false;
 }
 
 std::vector<Tile*>* Tile::getAdj()
@@ -39,18 +38,6 @@ void Tile::setType(int newtype)
 void Tile::addAdj(Tile* tile)
 {
 	adj->push_back(tile);
-}
-
-void Tile::setSelected()
-{
-	if (selected == false)
-		selected = true;
-	else selected = false;
-}
-
-bool Tile::isSelected()
-{
-	return selected;
 }
 
 Tile::~Tile()

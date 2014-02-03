@@ -35,8 +35,11 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		for (int i = 0, numT = 0; i < indices.size(); i += 4, numT++)
 		{
-
-			glUniform1i(glGetUniformLocation(progID, "selected"), getTile(numT)->isSelected());
+			if (numT == selected)
+				glUniform1i(glGetUniformLocation(progID, "selected"), true);
+			else
+				glUniform1i(glGetUniformLocation(progID, "selected"), false);
+			glUniform1i(glGetUniformLocation(progID, "type"), getTile(numT)->getType());
 			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
 		glUseProgram(0);
@@ -56,6 +59,16 @@ void TileGrid::addTile(Tile* tile)
 Tile* TileGrid::getTile(int index)
 {
 	return tiles.at(index);
+}
+
+void TileGrid::setSelected(int index)
+{
+	selected = index;
+}
+
+int TileGrid::whichSelected()
+{
+	return selected;
 }
 
 TileGrid::~TileGrid()
