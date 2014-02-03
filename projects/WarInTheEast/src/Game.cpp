@@ -3,8 +3,6 @@
 Game::Game()
 {
 	window = NULL;
-	Running = true;
-	DetectCameraMovement = false;
 }
 
 bool  Game::isOpenGLError() {
@@ -41,77 +39,7 @@ void Game::OnRender()
 
 bool Game::OnEvent(SDL_Event* Event)
 {
-	static float x = 0.0f, y = 0.0f;
-	if (Event->type == SDL_WINDOWEVENT_RESIZED)
-	{
-		glViewport(0, 0, Event->window.data1, Event->window.data2);
-	}
-	else
-	if (Event->type == SDL_QUIT)
-	{
-		Running = false;
-	}
-	else
-	if (Event->type == SDL_MOUSEWHEEL)
-	{
-		manager->updateCameraZoom(Event->wheel.y);
-	}
-	else
-	if (Event->type == SDL_MOUSEBUTTONDOWN)
-	{
-		if (Event->button.button == SDL_BUTTON_MIDDLE)
-		{
-			if (DetectCameraMovement == true)
-			{
-				DetectCameraMovement = false;
-				/*SDL_SetRelativeMouseMode(SDL_bool(false));
-				return true;*/
-			}
-			else
-			{
-				DetectCameraMovement = true;
-				/*SDL_SetRelativeMouseMode(SDL_bool(true));
-				return true;*/
-			}
-		}
-		else
-		if (Event->button.button == SDL_BUTTON_LEFT)
-		{
-			DetectCameraMovement = false;
-			//GLuint updatedPixel = 1;
-			//manager->treatTileSetPicking(Event->motion.x, Event->motion.y);
-			//glReadPixels(Event->motion.x, WINDOW_HEIGHT - Event->motion.y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &updatedPixel);
-			manager->tilesRayPick(Event->motion.x, Event->motion.y);
-
-			//manager->getScene()->getTileGrid()->getTile(updatedPixel - 1);
-			return true;
-		}
-		else
-		{
-			DetectCameraMovement = false;
-			/*SDL_SetRelativeMouseMode(SDL_bool(false));
-			return true;*/
-		}
-	}
-	else 
-	if (Event->type == SDL_MOUSEMOTION)
-	{
-		//Update mouse coordinates 
-		x = Event->motion.x - WINDOW_WIDTH / 2.0f;
-		y = -(Event->motion.y - WINDOW_HEIGHT / 2.0f);
-		//std::cout << "X-> " << x << std::endl;
-		//std::cout << "Y-> " << y << std::endl;
-		if (DetectCameraMovement)
-		{
-			manager->updateCameraPosition(x, y);
-			manager->updateLastMXY(x, y);
-			//manager->updateCameraRotation(x, y);	
-			return true;
-		}
-		manager->updateLastMXY(x, y);
-	}
-
-	return false;
+	return eventHandler->handle(Event);
 }
 
 bool Game::OnInit()
@@ -192,6 +120,7 @@ bool Game::OnOpenglInit()
 bool Game::OnGameInit()
 {
 	manager = new Manager();
+	eventHandler = new EventHandler(manager);
 	return true;
 }
 
@@ -216,7 +145,7 @@ int Game::OnExecute()
 
 	int start, end;
 	//primary run loop
-	while(Running)
+	while(!eventHandler->hasQuitEvent())
 	{
 		start = SDL_GetTicks();
 

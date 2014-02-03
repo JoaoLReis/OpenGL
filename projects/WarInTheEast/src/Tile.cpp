@@ -1,8 +1,7 @@
 #include "Tile.h"
 #include "Piece.h"
 
-Tile::Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position, int ident)
-	: Piece(vs, is, prog, ident)
+Tile::Tile(glm::vec3 position)
 {
 	adj = new std::vector<Tile*>;
 	type = DEFAULT;

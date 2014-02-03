@@ -3,7 +3,7 @@
 
 enum type { BUILD, MOVEMENT, DEFAULT };
 
-class Tile : public Piece
+class Tile
 {
 	std::vector<Tile*>* adj;
 	glm::vec3 pos;
@@ -13,7 +13,7 @@ class Tile : public Piece
 
 public:
 	Tile();
-	Tile(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, glm::vec3 position, int ident);
+	Tile(glm::vec3 position);
 
 	std::vector<Tile*>* getAdj();
 	glm::vec3 getPos();

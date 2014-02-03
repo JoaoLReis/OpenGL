@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Includes.h"
-#include "Manager.h"
+#include "EventHandler.h"
 #include <time.h> 
 
 class Game
 {
 private:
-	bool Running, DetectCameraMovement;
 	SDL_Window* window;
 	SDL_GLContext context;
 	SDL_Event Event;
 
 	Manager* manager;
+	EventHandler* eventHandler;
 
 	int frame;
 

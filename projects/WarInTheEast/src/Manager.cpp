@@ -4,8 +4,6 @@ Manager::Manager()
 {
 	camera = new Camera();
 	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR); 
-	//camera->OffsetOrientation(glm::vec3(0.0, 1.0, 0.0), -45);
-	//camera->OffsetOrientation(glm::vec3(1.0, 0.0, 0.0), 45);
 	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, -40.0f));
 	camera->updateCamera();
 	mapList = new std::vector<Scene*>;
@@ -233,7 +231,7 @@ Scene *Manager::initMap1()
 	std::vector<Tile*> *totaltiles = new std::vector<Tile*>;
 	std::vector<Vertex> *tilevertexes = new std::vector<Vertex>;
 	std::vector<unsigned int> *tileindexes = new std::vector<unsigned int>;
-
+	Tile * t;
 	for (int i = 0; i < NUMTILESY; i++){
 		for (int k = 0; k < NUMTILESX; k++){
 			vert.XYZW = glm::vec4(k, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
@@ -249,16 +247,14 @@ Scene *Manager::initMap1()
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
 
-
-
 			for (int j = 0; j < 4; j++)
 			{
 				is->push_back(j);
 			}
 
-			p = new Tile(*vs, *is, shProg, glm::vec3(k, i, 0), scene->getId());
+			t = new Tile(glm::vec3(k, i, 0));
 
-			totaltiles->push_back((Tile*)p);
+			totaltiles->push_back(t);
 
 			vs->clear();
 			is->clear();
