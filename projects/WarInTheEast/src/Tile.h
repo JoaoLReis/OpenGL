@@ -9,7 +9,6 @@ class Tile : public Piece
 	glm::vec3 pos;
 	
 	int type, oldtype;
-	bool selected;
 
 public:
 	Tile();
@@ -20,8 +19,6 @@ public:
 	int getType();
 	int getOldType();	
 	int getId();
-	void setSelected();
-	bool isSelected();
 
 	void setType(int newtype);
 	void addAdj(Tile* tile);

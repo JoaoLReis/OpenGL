@@ -57,6 +57,29 @@ bool Game::OnEvent(SDL_Event* Event)
 		manager->updateCameraZoom(Event->wheel.y);
 	}
 	else
+	if (Event->type == SDL_KEYDOWN)
+	{
+		if (Event->key.keysym.sym == SDLK_s){
+			manager->saveTileGrid();
+		}
+		else if (Event->key.keysym.sym == SDLK_l)
+		{
+			manager->loadTileGrid();
+		}
+		else if (Event->key.keysym.sym == SDLK_b)
+		{
+			manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->setType(BUILD);
+		}
+		else if (Event->key.keysym.sym == SDLK_n)
+		{
+			manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->setType(MOVEMENT);
+		}
+		else if (Event->key.keysym.sym == SDLK_m)
+		{
+			manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->setType(DEFAULT);
+		}
+	}
+	else
 	if (Event->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (Event->button.button == SDL_BUTTON_MIDDLE)

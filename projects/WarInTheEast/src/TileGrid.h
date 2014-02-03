@@ -5,7 +5,7 @@
 class TileGrid : public Piece
 {
 	std::vector<Tile*> tiles;
-
+	int selected;
 
 public:
 	TileGrid(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, std::vector<Tile*> totaltiles, int ident);
@@ -17,6 +17,9 @@ public:
 	void addTile(Tile* tile);
 
 	Tile* getTile(int index);
+
+	void setSelected(int index);
+	int whichSelected();
 
 	virtual ~TileGrid();
 };

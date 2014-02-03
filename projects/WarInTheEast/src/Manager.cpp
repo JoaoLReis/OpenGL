@@ -12,7 +12,7 @@ Manager::Manager()
 	initMapList();
 }
 
-void Manager::tilesRayPick(float x, float y)
+float Manager::tilesRayPick(float x, float y)
 {
 	glm::vec2 mouse;
 
@@ -41,7 +41,8 @@ void Manager::tilesRayPick(float x, float y)
 
 	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
 	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
-		activeScene->getTileGrid()->getTile(index)->setSelected();
+		activeScene->getTileGrid()->setSelected(index);
+	return index;
 }
 
 void Manager::updateCameraRotation(float x, float y)
@@ -289,3 +290,70 @@ Scene* Manager::getScene()
 	return activeScene;
 }
 
+void Manager::saveTileGrid()
+{
+	std::string savename = "TileGrid";
+	std::string pos = ".tlg";
+
+	savename.append(pos);
+
+	std::ofstream out(savename);
+	std::ofstream file;
+
+	file.open(savename);
+
+	file << "Dim " << NUMTILESX << ", " << NUMTILESY << std::endl;
+	file << std::endl;
+
+	TileGrid* tgrid = activeScene->getTileGrid(); 
+	std::vector<Tile*> tiles = tgrid->getTiles();
+
+	for (auto it = tiles.begin(); it != tiles.end(); ++it)
+	{
+		file << "Ot " << (*it)->getOldType() << std::endl;
+		file << "T " << (*it)->getType() << std::endl;
+		file << std::endl;
+	}
+
+	file << "end";
+	file.close();
+}
+
+void Manager::loadTileGrid()
+{
+	std::ifstream file;
+	file.open("TileGrid.tlg");
+
+	std::string lineID = std::string();
+	char *line = new char();
+	TileGrid* tgrid = activeScene->getTileGrid();
+	int dimx, dimy, oldType, type, index = 0;
+	
+	if (file.peek() == 'Dim'){
+		file.get(); // to consume the peeked character
+		file >> dimx >> dimy;
+		file.get(); // to consume the \n
+	}
+
+	while (file.getline(line, 256))
+	{
+		if (strcmp(line, "end") != 0){
+			file >> lineID;
+			if (lineID.compare("Ot") == 0){
+				file >> oldType;
+				file.get();
+				tgrid->getTile(index)->setType(oldType);
+			}
+			file >> lineID;
+			if (lineID.compare("T") == 0){
+				file >> type;
+				file.get();
+				tgrid->getTile(index++)->setType(type);
+			}
+		}
+		else
+			break;
+	}
+
+	file.close();
+}
