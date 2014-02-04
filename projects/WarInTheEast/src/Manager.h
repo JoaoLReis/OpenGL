@@ -7,6 +7,7 @@
 #include "PieceReader.h"
 #include "Tile.h"
 #include "TileGrid.h"
+#include "Interface.h"
 
 class Manager
 {
@@ -16,23 +17,28 @@ private:
 	std::vector<Scene*> *mapList;
 	Scene* activeScene;
 
+	Interface* interface;
+
 public:
 
 	Manager();
 
 	void draw();
 	void initMapList();
+	void initInterface();
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);
 	void updateLastMXY(float x, float y);
-	float tilesRayPick(float x, float y);
+	void tilesRayPick(float x, float y);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 
 	Scene* getScene();
 
 	Scene *initMap1();
+
+
 
 	//TODO
 	void saveTileGrid();

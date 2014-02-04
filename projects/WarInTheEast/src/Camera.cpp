@@ -14,9 +14,9 @@ void Camera::setPerspective(float fovy, float aspect, float zNear, float zFar)
 	ProjectionMatrix = glm::perspective(fovy, aspect, zNear, zFar); 
 }
 
-void Camera::setOrtogonal(float Left, float  Right, float Top, float Bottom, float Near, float Far) 
+void Camera::setOrtogonal(float Left, float  Right, float Bottom, float Top, float Near, float Far)
 {
-	ProjectionMatrix = glm::ortho(Left, Right, Top, Bottom, Near, Far); 
+	ProjectionMatrix = glm::ortho(Left, Right, Bottom, Top, Near, Far);
 }
 
 void Camera::OffsetOrientation(glm::vec3 &_axis, float fAngDeg)

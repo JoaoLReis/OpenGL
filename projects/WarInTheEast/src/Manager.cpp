@@ -3,14 +3,16 @@
 Manager::Manager()
 {
 	camera = new Camera();
-	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR); 
+	camera->setPerspective(tFOVY, WINDOW_WIDTH / WINDOW_HEIGHT, tNEAR, tFAR);
 	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, -40.0f));
 	camera->updateCamera();
 	mapList = new std::vector<Scene*>;
+
 	initMapList();
+	initInterface();
 }
 
-float Manager::tilesRayPick(float x, float y)
+void Manager::tilesRayPick(float x, float y)
 {
 	glm::vec2 mouse;
 
@@ -30,17 +32,26 @@ float Manager::tilesRayPick(float x, float y)
 
 	glm::vec3 direction = glm::vec3(to - from);
 
-	//intersectionWith Z = 0
-	float s = -from.z / direction.z;
-	glm::vec3 pos;
-	pos.x = from.x + direction.x * s;
-	pos.y = from.y + direction.y * s;
-	std::cout << "MOUSE at -> " << pos.x << " "<< pos.y << " "<< pos.z << std::endl;
+	/*First Intersect with UI elements.
+	then check with the tileGrid*/
+	/*-------------------------------*/
+	int uiElem = interface->checkClick(mouse);
+	if (uiElem == -1)
+		activeScene->getTileGrid()->checkClick(from, direction);
+	else if (uiElem == BUILD)
+	{
+		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(BUILD);
+	}
+	else if (uiElem == MOVEMENT)
+	{
+		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(MOVEMENT);
+	}
+	else if (uiElem == DEFAULT)
+	{
+		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(DEFAULT);
+	}
+	/*-------------------------------*/
 
-	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
-	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
-		activeScene->getTileGrid()->setSelected(index);
-	return index;
 }
 
 void Manager::updateCameraRotation(float x, float y)
@@ -75,6 +86,7 @@ void Manager::updateCameraZoom(int amount)
 void Manager::draw()
 {
 	activeScene->draw(camera->getViewMatrix(), camera->getProjectionMatrix(), camera->computeCameraCenter());
+	interface->draw(glm::mat4(1.0), glm::mat4(1.0), camera->computeCameraCenter());
 }
 
 ShaderProgram* Manager::createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath)
@@ -279,6 +291,68 @@ Scene *Manager::initMap1()
 	*/
 
 	return(scene);
+}
+
+void Manager::initInterface()
+{
+	ShaderProgram *sh = createShaderProgram("..\\shaders\\vertex_shader_2d.glsl", "..\\shaders\\fragment_shader_2d.glsl");
+	Vertex vert = *(new Vertex());
+	std::vector<Vertex> *vs = new std::vector<Vertex>;
+	std::vector<Vertex> *tmp = new std::vector<Vertex>;
+	std::vector<unsigned int> *is = new std::vector<unsigned int>;
+	std::vector<UiElement> *ui = new std::vector<UiElement>;
+
+	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	ui->push_back(*new UiElement(*tmp, BUILD));
+	tmp->clear(); 
+
+	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	ui->push_back(*new UiElement(*tmp, MOVEMENT));
+	tmp->clear();
+
+	vert.XYZW = glm::vec4(-1.0, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	ui->push_back(*new UiElement(*tmp, DEFAULT));
+	tmp->clear();
+
+	for (int j = 0; j < vs->size(); j++)
+	{
+		is->push_back(j);
+	}
+	
+	interface = new Interface(*vs, *is, *ui, sh);
 }
 
 Scene* Manager::getScene()

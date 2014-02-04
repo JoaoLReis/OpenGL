@@ -1,7 +1,11 @@
 #include "TileGrid.h"
 
 
-TileGrid::TileGrid(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, std::vector<Tile*> totaltiles, int ident) : Piece(vs, is, prog, ident)
+TileGrid::TileGrid (std::vector<Vertex> vs, 
+					std::vector<unsigned int> is, 
+					ShaderProgram* prog, 
+					std::vector<Tile*> totaltiles, 
+					int ident) : Piece(vs, is, prog, ident)
 {
 	tiles = totaltiles;
 }
@@ -44,6 +48,24 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 		}
 		glUseProgram(0);
 		glBindVertexArray(0);
+}
+
+bool TileGrid::checkClick(glm::vec4 from, glm::vec3 direction)
+{
+	//intersectionWith Z = 0
+	float s = -from.z / direction.z;
+	glm::vec3 pos;
+	pos.x = from.x + direction.x * s;
+	pos.y = from.y + direction.y * s;
+	
+	std::cout << "MOUSE in world pos at -> " << pos.x << " " << pos.y << " " << pos.z << std::endl;
+	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
+	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
+	{
+		setSelected(index);
+		return true;
+	}
+	else return false;
 }
 
 std::vector<Tile*> TileGrid::getTiles()
