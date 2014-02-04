@@ -119,3 +119,8 @@ void Piece::setColor()
 
 	}
 }
+
+void Piece::translate(glm::vec3 vec)
+{
+	transformation = glm::transpose(glm::translate(transformation, vec));
+}

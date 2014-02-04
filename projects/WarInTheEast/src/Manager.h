@@ -9,6 +9,8 @@
 #include "TileGrid.h"
 #include "Interface.h"
 
+enum towerTypes {NORMAL, HEAVY, SLOW};
+
 class Manager
 {
 private:
@@ -31,6 +33,8 @@ public:
 	void updateCameraZoom(int amount);
 	void updateLastMXY(float x, float y);
 	void tilesRayPick(float x, float y);
+
+	void addPieceToTile(int index, int type);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 

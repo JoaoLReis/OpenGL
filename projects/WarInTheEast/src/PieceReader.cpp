@@ -33,7 +33,9 @@ void PieceReader::readObject(std::string fpath)
 			std::istringstream s(line.substr(2));
 			glm::vec2 v; s >> v.x; s >> v.y;
 			text->push_back(v);
-			hasTex = true;
+			
+			//TODO Comented due to faces without texture causing problems
+			//hasTex = true;
 		}
 		else if (line.substr(0, 2) == "f ") {
 			std::istringstream s(line.substr(2));
