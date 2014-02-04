@@ -46,6 +46,11 @@ bool EventHandler::handle(SDL_Event* Event)
 		{
 			manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->setType(DEFAULT);
 		}
+		else if (Event->key.keysym.sym == SDLK_t)
+		{
+			if (manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->getType() == BUILD)
+				manager->addPieceToTile(manager->getScene()->getTileGrid()->whichSelected(), 0);
+		}
 	}
 	else
 	if (Event->type == SDL_MOUSEBUTTONDOWN)

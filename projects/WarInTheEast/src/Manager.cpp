@@ -207,28 +207,13 @@ Scene *Manager::initMap1()
 	is->clear();
 
 	/**/
-	/*
-	+++++++++++++++++++++++++++++++++++++++++++++++ CYLINDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	*/
-	/** /
-	PieceReader::getInstance().readObject("..\\objects\\Cylinder.obj");
-	
-	*vs = PieceReader::getInstance().getVertices();
-	*is = PieceReader::getInstance().getIndices();
-	p = new Piece(*vs, *is, shProg); 
-	ps->push_back(p);
 
-	PieceReader::getInstance().clearAll();
-	vs->clear();
-	is->clear();
-	
-	/**/
-	/*
-	+++++++++++++++++++++++++++++++++++++++++++++++  GRID  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	*/
-	
+/*
++++++++++++++++++++++++++++++++++++++++++++++++  GRID  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
 	Vertex vert = *(new Vertex());
-	float size = 1;
+	float size = TILESIZE;
 	std::vector<Tile*> *totaltiles = new std::vector<Tile*>;
 	std::vector<Vertex> *tilevertexes = new std::vector<Vertex>;
 	std::vector<unsigned int> *tileindexes = new std::vector<unsigned int>;
@@ -236,7 +221,7 @@ Scene *Manager::initMap1()
 	for (int i = 0; i < NUMTILESY; i++){
 		for (int k = 0; k < NUMTILESX; k++){
 			vert.XYZW = glm::vec4(k, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
-			vs->push_back(vert); 
+			vs->push_back(vert);
 			tilevertexes->push_back(vert);
 			vert.XYZW = glm::vec4(k + size, i, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 			vs->push_back(vert);
@@ -244,7 +229,7 @@ Scene *Manager::initMap1()
 			vert.XYZW = glm::vec4(k + size, i + size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
-			vert.XYZW = glm::vec4(k, i+size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+			vert.XYZW = glm::vec4(k, i + size, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
 			vs->push_back(vert);
 			tilevertexes->push_back(vert);
 
@@ -267,13 +252,29 @@ Scene *Manager::initMap1()
 		tileindexes->push_back(l);
 	}
 
-	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, *totaltiles, 0);
+	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, *totaltiles, scene->getId());
 	ps->push_back(tgrid);
 
 	totaltiles->clear();
 	tileindexes->clear();
 	tilevertexes->clear();
 
+	/*
+	+++++++++++++++++++++++++++++++++++++++++++++++ CYLINDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	*/
+	/** /
+	PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
+	
+	*vs = PieceReader::getInstance().getVertices();
+	*is = PieceReader::getInstance().getIndices();
+	p = new Piece(*vs, *is, shProg, scene->getId()); 
+	ps->push_back(p);
+
+	PieceReader::getInstance().clearAll();
+	vs->clear();
+	is->clear();
+	
+	/**/
 	/*
 	+++++++++++++++++++++++++++++++++++++++++++++++           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	*/
@@ -352,4 +353,29 @@ void Manager::loadTileGrid()
 	}
 
 	file.close();
+}
+
+void Manager::addPieceToTile(int index, int type)
+{
+	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
+	Piece* p;
+
+	switch (type)
+	{
+
+	case NORMAL:
+		PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
+		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), activeScene->getId());
+		p->translate(tile->getPos());
+		tile->addObj(p);
+		activeScene->addPiece(p);
+		break;
+	case HEAVY:
+		break;
+	case SLOW:
+		break;
+	default:
+		break;
+	}
+
 }

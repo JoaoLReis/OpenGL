@@ -10,6 +10,8 @@ class Tile
 	
 	int type, oldtype;
 
+	Piece* gameObject;
+
 public:
 	Tile();
 	Tile(glm::vec3 position);
@@ -19,9 +21,12 @@ public:
 	int getType();
 	int getOldType();	
 	int getId();
+	bool hasObject();
 
 	void setType(int newtype);
 	void addAdj(Tile* tile);
+	void addObj(Piece* piece);
+	void removeObj();
 
 	virtual ~Tile();
 };

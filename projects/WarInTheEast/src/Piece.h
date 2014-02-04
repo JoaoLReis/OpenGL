@@ -31,9 +31,11 @@ public:
 	void addIndex(unsigned int v);
 
 	int getID();
+	
 	void setId(int id);
-
 	void setColor();
+
+	void translate(glm::vec3 vec);
 
 	glm::mat4 createModelMatrix();
 };
