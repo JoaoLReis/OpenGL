@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shaders\fragment_shader.glsl" />
+    <None Include="..\shaders\fragment_shader_2d.glsl" />
     <None Include="..\shaders\vertex_shader.glsl" />
+    <None Include="..\shaders\vertex_shader_2d.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>
@@ -109,7 +111,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_image.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SOIL.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>

@@ -139,5 +139,11 @@
     <None Include="..\shaders\vertex_shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\shaders\vertex_shader_2d.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\shaders\fragment_shader_2d.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
