@@ -51,6 +51,31 @@ bool EventHandler::handle(SDL_Event* Event)
 			if (manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->getType() == BUILD)
 				manager->addPieceToTile(manager->getScene()->getTileGrid()->whichSelected(), 0);
 		}
+		else if (Event->key.keysym.sym == SDLK_UP)
+		{
+			int selected = manager->getScene()->getTileGrid()->whichSelected();
+			if (selected + NUMTILESX < 600)
+				manager->getScene()->getTileGrid()->setSelected(selected + NUMTILESX);
+			
+		}
+		else if (Event->key.keysym.sym == SDLK_DOWN)
+		{
+			int selected = manager->getScene()->getTileGrid()->whichSelected();
+			if (selected >= NUMTILESX)
+				manager->getScene()->getTileGrid()->setSelected(selected - NUMTILESX);
+		}
+		else if (Event->key.keysym.sym == SDLK_LEFT)
+		{
+			int selected = manager->getScene()->getTileGrid()->whichSelected();
+			if (selected != 0)
+				manager->getScene()->getTileGrid()->setSelected(selected - 1);
+		}
+		else if (Event->key.keysym.sym == SDLK_RIGHT)
+		{
+			int selected = manager->getScene()->getTileGrid()->whichSelected();
+			if (selected != (NUMTILESX * NUMTILESY - 1))
+				manager->getScene()->getTileGrid()->setSelected(selected + 1);
+		}
 	}
 	else
 	if (Event->type == SDL_MOUSEBUTTONDOWN)
