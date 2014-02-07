@@ -24,12 +24,12 @@ void PieceReader::readObject(std::string fpath)
 			glm::vec4 v; s >> v.x; s >> v.y; s >> v.z; v.w = 1.0f;
 			verts->push_back(v);
 		}
-		if (line.substr(0, 3) == "vn ") {
+		else if (line.substr(0, 3) == "vn ") {
 			std::istringstream s(line.substr(2));
 			glm::vec4 v; s >> v.x; s >> v.y; s >> v.z; v.w = 1.0f;
 			normals->push_back(v);
 		}
-		if (line.substr(0, 3) == "vt ") {
+		else if (line.substr(0, 3) == "vt ") {
 			std::istringstream s(line.substr(2));
 			glm::vec2 v; s >> v.x; s >> v.y;
 			text->push_back(v);
@@ -40,7 +40,6 @@ void PieceReader::readObject(std::string fpath)
 		else if (line.substr(0, 2) == "f ") {
 			std::istringstream s(line.substr(2));
 			GLushort a, b, c;
-			char tmp;
 			Vertex v;
 
 			s >> a;
@@ -50,15 +49,14 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 			
 			s.ignore(256, '/');
-			s >> tmp;	
-			if (tmp != '/')
+			if (s.peek() != '/')
 			{
-				a = (int)tmp;
+				s >> a;
 				a--;
 				v.UV = text->at(a);
-				s.ignore(256, '/');
 			}
 
+			s.ignore(256, '/');
 			s >> a;
 			a--;
 			v.NORMAL = normals->at(a);
@@ -72,15 +70,14 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 
 			s.ignore(256, '/');
-			s >> tmp;
-			if (tmp != '/')
+			if (s.peek() != '/')
 			{
-				b = (int)tmp;
+				s >> b;
 				b--;
 				v.UV = text->at(b);
-				s.ignore(256, '/');
 			}
 
+			s.ignore(256, '/');
 			s >> b;
 			b--;
 			v.NORMAL = normals->at(b);
@@ -94,15 +91,14 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 
 			s.ignore(256, '/');
-			s >> tmp;
-			if (tmp != '/')
+			if (s.peek() != '/')
 			{
-				c = (int)tmp;
+				s >> c;
 				c--;
 				v.UV = text->at(c);
-				s.ignore(256, '/');
 			}
 
+			s.ignore(256, '/');
 			s >> c;
 			c--;
 			v.NORMAL = normals->at(c);
