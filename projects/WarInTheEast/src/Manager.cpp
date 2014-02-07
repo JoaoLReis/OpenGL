@@ -442,13 +442,14 @@ void Manager::addPieceToTile(int index, int type)
 {
 	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
 	Piece* p;
-
+	Texture* tex = new Texture2D();
 	switch (type)
 	{
 
 	case NORMAL:
 		PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
-		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), activeScene->getId());
+		tex->load("..\\textures\\Tower_Normal.psd");
+		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, activeScene->getId());
 		p->translate(tile->getPos());
 		tile->addObj(p);
 		activeScene->addPiece(p);

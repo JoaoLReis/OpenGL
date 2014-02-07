@@ -40,6 +40,7 @@ void PieceReader::readObject(std::string fpath)
 		else if (line.substr(0, 2) == "f ") {
 			std::istringstream s(line.substr(2));
 			GLushort a, b, c;
+			char tmp;
 			Vertex v;
 
 			s >> a;
@@ -49,14 +50,15 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 			
 			s.ignore(256, '/');
-			if (hasTex)
+			s >> tmp;	
+			if (tmp != '/')
 			{
-				s >> a;
+				a = (int)tmp;
 				a--;
 				v.UV = text->at(a);
+				s.ignore(256, '/');
 			}
 
-			s.ignore(256, '/');
 			s >> a;
 			a--;
 			v.NORMAL = normals->at(a);
@@ -70,14 +72,15 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 
 			s.ignore(256, '/');
-			if (hasTex)
+			s >> tmp;
+			if (tmp != '/')
 			{
-				s >> b;
+				b = (int)tmp;
 				b--;
 				v.UV = text->at(b);
+				s.ignore(256, '/');
 			}
 
-			s.ignore(256, '/');
 			s >> b;
 			b--;
 			v.NORMAL = normals->at(b);
@@ -91,14 +94,15 @@ void PieceReader::readObject(std::string fpath)
 			v.RGBA = glm::vec4(1.0f);
 
 			s.ignore(256, '/');
-			if (hasTex)
+			s >> tmp;
+			if (tmp != '/')
 			{
-				s >> c;
+				c = (int)tmp;
 				c--;
 				v.UV = text->at(c);
+				s.ignore(256, '/');
 			}
 
-			s.ignore(256, '/');
 			s >> c;
 			c--;
 			v.NORMAL = normals->at(c);

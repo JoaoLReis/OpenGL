@@ -1,5 +1,8 @@
 #version 330 core
 
+uniform sampler2D Texture0;
+uniform bool textured;
+
 uniform vec3 LightPosition;
 uniform vec2 LightAttenuation;
 uniform vec3 AmbientLightColor;
@@ -56,6 +59,9 @@ void main(void)
 
 	float attenuation = 1 / (1.0 +LightAttenuation.x * Ldist + LightAttenuation.y * pow(Ldist,2));
 	
+	if(textured)
+		colorOut = texture(Texture0, ex_Texcoord);
+	else 
 	if(!selected)
 	{
 	if(type == 0)
