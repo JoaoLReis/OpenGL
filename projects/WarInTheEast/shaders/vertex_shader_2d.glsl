@@ -11,7 +11,7 @@ out vec2 ex_Texture;
 void main() {
     ex_Colors = in_Color;
     gl_Position = in_Position;
-	ex_Texture = in_Texture;
+	ex_Texture = vec2(in_Texture.x, 1.0 - in_Texture.y);
 }
 
 

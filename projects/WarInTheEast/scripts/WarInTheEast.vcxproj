@@ -54,6 +54,7 @@
     <None Include="..\textures\Build_Pick.psd" />
     <None Include="..\textures\Default_Pick.psd" />
     <None Include="..\textures\Movement_Pick.psd" />
+    <None Include="..\textures\Tower_Normal.psd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>

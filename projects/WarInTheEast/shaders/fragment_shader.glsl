@@ -60,7 +60,7 @@ void main(void)
 	float attenuation = 1 / (1.0 +LightAttenuation.x * Ldist + LightAttenuation.y * pow(Ldist,2));
 	
 	if(textured)
-		colorOut = texture(Texture0, ex_Texcoord);
+		colorOut = texture(Texture0, ex_Texcoord) * vec4((ambient + (diffuse + specular) * attenuation),1.0);
 	else 
 	if(!selected)
 	{

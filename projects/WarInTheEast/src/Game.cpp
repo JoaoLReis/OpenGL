@@ -156,14 +156,14 @@ int Game::OnExecute()
 	{
 		start = SDL_GetTicks();
 
-		OnLoop();
-		OnRender();
-
 		while (SDL_PollEvent(&Event))
 		{
 			if (OnEvent(&Event))
 				break;
 		}
+
+		OnLoop();
+		OnRender();
 
 		end = SDL_GetTicks() - start;
 		if(end < 1000 / FRAMES_PER_SECOND)
