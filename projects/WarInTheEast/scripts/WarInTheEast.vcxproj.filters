@@ -184,5 +184,11 @@
     <None Include="..\textures\Build_Pick.psd">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\textures\Movement_Pick.psd">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\textures\Default_Pick.psd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

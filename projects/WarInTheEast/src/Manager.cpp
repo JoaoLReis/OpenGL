@@ -329,13 +329,15 @@ void Manager::initInterface()
 	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
+	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, -1.0f); // 0 - FRONT
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
+	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, -1.0f);  // 1
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	ui->push_back(*new UiElement(*tmp, 0, MOVEMENT));
+	tex = new Texture2D();
+	tex->load("..\\textures\\Movement_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, MOVEMENT));
 	tmp->clear();
 
 	vert.XYZW = glm::vec4(-1.0, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
@@ -344,13 +346,15 @@ void Manager::initInterface()
 	vert.XYZW = glm::vec4(-0.8, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
+	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, -1.0f); // 0 - FRONT
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
+	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, -1.0f);  // 1
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	ui->push_back(*new UiElement(*tmp, 0, DEFAULT));
+	tex = new Texture2D();
+	tex->load("..\\textures\\Default_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, DEFAULT));
 	tmp->clear();
 
 	for (int j = 0; j < vs->size(); j++)
