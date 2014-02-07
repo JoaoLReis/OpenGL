@@ -54,9 +54,12 @@ void Interface::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3
 	glUseProgram(progID);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	for (int i = 0; i < ui.size()*4; i += 4)
+
+	int i = 0;
+	for (std::vector<UiElement>::iterator it = ui.begin(); it != ui.end(); ++it)
 	{
-		glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
+		(*it).draw(i, progID); 
+		i += 4;
 	}
 	glUseProgram(0);
 	glBindVertexArray(0);

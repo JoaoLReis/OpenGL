@@ -2,6 +2,7 @@
 
 #include "Includes.h"
 #include "Vertex.h"
+#include "Textures.h"
 #include "ShaderProgram.h"
 
 class Piece
@@ -15,6 +16,7 @@ protected:
 	glm::mat4 transformation;
 
 	ShaderProgram* shaderProg;
+	Texture * tex;
 
 	std::vector<Vertex> vertexes;
 	std::vector<unsigned int> indices;
@@ -25,6 +27,7 @@ protected:
 public:
 	Piece();
 	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, int ident);
+	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, Texture* t, int ident);
 
 	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
 	void createBufferObject();

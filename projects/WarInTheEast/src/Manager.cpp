@@ -40,15 +40,18 @@ void Manager::tilesRayPick(float x, float y)
 		activeScene->getTileGrid()->checkClick(from, direction);
 	else if (uiElem == BUILD)
 	{
-		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(BUILD);
+		if (activeScene->getTileGrid()->whichSelected() != -1)
+			activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(BUILD);
 	}
 	else if (uiElem == MOVEMENT)
 	{
-		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(MOVEMENT);
+		if (activeScene->getTileGrid()->whichSelected() != -1)
+			activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(MOVEMENT);
 	}
 	else if (uiElem == DEFAULT)
 	{
-		activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(DEFAULT);
+		if (activeScene->getTileGrid()->whichSelected() != -1)
+			activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(DEFAULT);
 	}
 	/*-------------------------------*/
 }
@@ -301,50 +304,53 @@ void Manager::initInterface()
 	std::vector<Vertex> *tmp = new std::vector<Vertex>;
 	std::vector<unsigned int> *is = new std::vector<unsigned int>;
 	std::vector<UiElement> *ui = new std::vector<UiElement>;
+	Texture* tex;
 
-	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
 	vs->push_back(vert);
 	tmp->push_back(vert);
 	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-0.8, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vert.XYZW = glm::vec4(-0.8, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, -1.0f); // 0 - FRONT
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-1.0, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vert.XYZW = glm::vec4(-1.0, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, -1.0f);  // 1
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	ui->push_back(*new UiElement(*tmp, BUILD));
+	tex = new Texture2D();
+	tex->load("..\\textures\\Build_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, BUILD));
 	tmp->clear(); 
 
-	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
 	vs->push_back(vert);
 	tmp->push_back(vert);
 	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vert.XYZW = glm::vec4(-0.8, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	ui->push_back(*new UiElement(*tmp, MOVEMENT));
+	ui->push_back(*new UiElement(*tmp, 0, MOVEMENT));
 	tmp->clear();
 
-	vert.XYZW = glm::vec4(-1.0, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 2
+	vert.XYZW = glm::vec4(-1.0, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
 	vs->push_back(vert);
 	tmp->push_back(vert);
 	vert.XYZW = glm::vec4(-0.8, -1.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
+	vert.XYZW = glm::vec4(-0.8, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f);  // 1
+	vert.XYZW = glm::vec4(-1.0, -0.8, 0.0f, 1.0f), vert.RGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
 	vs->push_back(vert);
 	tmp->push_back(vert);
-	ui->push_back(*new UiElement(*tmp, DEFAULT));
+	ui->push_back(*new UiElement(*tmp, 0, DEFAULT));
 	tmp->clear();
 
 	for (int j = 0; j < vs->size(); j++)

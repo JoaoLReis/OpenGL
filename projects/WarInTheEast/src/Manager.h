@@ -8,6 +8,7 @@
 #include "Tile.h"
 #include "TileGrid.h"
 #include "Interface.h"
+#include "Texture2D.h"
 
 enum towerTypes {NORMAL, HEAVY, SLOW};
 

@@ -8,6 +8,7 @@ TileGrid::TileGrid (std::vector<Vertex> vs,
 					int ident) : Piece(vs, is, prog, ident)
 {
 	tiles = totaltiles;
+	selected = -1;
 }
 
 void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)

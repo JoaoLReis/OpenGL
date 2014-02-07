@@ -70,6 +70,11 @@ bool Game::OnInit()
 	glFrontFace(GL_CCW);
 	/*--------------------*/
 
+	/*Blending*/
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	/*--------------------*/
+
 	/* Depth buffer setup */
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -113,6 +118,8 @@ bool Game::OnOpenglInit()
 
 	/* Sets stencil buffer to 8 bit */
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
 	return true;
 }

@@ -1,9 +1,10 @@
 #include "UiElement.h"
 
-UiElement::UiElement(std::vector<Vertex> vs, int t)
+UiElement::UiElement(std::vector<Vertex> vs, Texture* t, int te)
 {
 	bounds = vs;
-	tpe = t;
+	tpe = te;
+	tex = t;
 }
 
 int UiElement::testIntersection(glm::vec2 mouse)
@@ -17,4 +18,19 @@ int UiElement::testIntersection(glm::vec2 mouse)
 		return tpe;
 	}
 	else return -1;
+}
+
+void UiElement::draw(int i, GLuint progID)
+{
+	if (tex != 0)
+	{
+		tex->actBindTexture();
+		glUniform1f(glGetUniformLocation(progID, "textured"), true);
+		glUniform1i(glGetUniformLocation(progID, "Texture0"), 0);
+	}
+	else
+	{
+		glUniform1f(glGetUniformLocation(progID, "textured"), false);
+	}
+	glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 }

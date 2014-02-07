@@ -10,6 +10,20 @@ Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram
 	initTransformation = glm::mat4(1.0f);
 	transformation = glm::mat4(1.0f);
 	createBufferObject();
+	tex = 0;
+}
+
+Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, Texture* t, int ident)
+{
+	id = ident;
+	vertexes = vs;
+	indices = is;
+	shaderProg = prog;
+	scale = glm::mat4(1.0f);
+	initTransformation = glm::mat4(1.0f);
+	transformation = glm::mat4(1.0f);
+	createBufferObject();
+	tex = t;
 }
 
 void Piece::createBufferObject()
@@ -82,6 +96,17 @@ void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cam
 	glUniform3f(glGetUniformLocation(progID, "MaterialDiffuseColor"), 0.9f, 0.9f, 0.9f);//0.9,0.1,0.1
 	glUniform3f(glGetUniformLocation(progID, "MaterialSpecularColor"), 0.9f, 0.9f, 0.9f);//0.9,0.9,0.9
 	glUniform1f(glGetUniformLocation(progID, "MaterialShininess"), 64.0f);//64.0f//22
+
+	if (tex != 0)
+	{
+		tex->actBindTexture();
+		glUniform1f(glGetUniformLocation(progID, "textured"), true);
+		glUniform1i(glGetUniformLocation(progID, "Texture0"), 0);
+	}
+	else
+	{
+		glUniform1f(glGetUniformLocation(progID, "textured"), false);
+	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glDrawElementsBaseVertex(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0, 0);
