@@ -181,5 +181,8 @@
     <None Include="..\shaders\fragment_shader_2d.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\textures\Build_Pick.psd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

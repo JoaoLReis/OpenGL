@@ -51,6 +51,7 @@
     <None Include="..\shaders\fragment_shader_2d.glsl" />
     <None Include="..\shaders\vertex_shader.glsl" />
     <None Include="..\shaders\vertex_shader_2d.glsl" />
+    <None Include="..\textures\Build_Pick.psd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>
