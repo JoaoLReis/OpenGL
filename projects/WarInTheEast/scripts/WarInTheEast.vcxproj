@@ -47,6 +47,9 @@
     <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\objects\lightAdvancedTower.mtl" />
+    <None Include="..\objects\lightEliteTower.mtl" />
+    <None Include="..\objects\lightNormalTower.mtl" />
     <None Include="..\shaders\fragment_shader.glsl" />
     <None Include="..\shaders\fragment_shader_2d.glsl" />
     <None Include="..\shaders\vertex_shader.glsl" />
@@ -55,6 +58,11 @@
     <None Include="..\textures\Default_Pick.psd" />
     <None Include="..\textures\Movement_Pick.psd" />
     <None Include="..\textures\Tower_Normal.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\objects\lightAdvancedTower.obj" />
+    <Object Include="..\objects\lightEliteTower.obj" />
+    <Object Include="..\objects\lightNormalTower.obj" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>
