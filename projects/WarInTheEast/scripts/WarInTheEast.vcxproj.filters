@@ -193,5 +193,25 @@
     <None Include="..\textures\Tower_Normal.psd">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\objects\lightAdvancedTower.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\objects\lightEliteTower.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\objects\lightNormalTower.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\objects\lightAdvancedTower.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\objects\lightEliteTower.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\objects\lightNormalTower.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>
