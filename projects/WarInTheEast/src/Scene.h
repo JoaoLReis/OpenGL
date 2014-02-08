@@ -15,6 +15,7 @@ public:
 	
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraCenter);
 	void addPiece(Piece *p);
+	void removePiece(int id);
 
 	Piece* getPiece(int index);
 

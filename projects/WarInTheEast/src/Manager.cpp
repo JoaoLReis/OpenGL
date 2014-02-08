@@ -446,7 +446,7 @@ void Manager::addPieceToTile(int index, int type)
 	switch (type)
 	{
 
-	case NORMAL:
+	case STARTER:
 		PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
 		tex->load("..\\textures\\Tower_Normal.psd");
 		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, activeScene->getId());
@@ -454,10 +454,48 @@ void Manager::addPieceToTile(int index, int type)
 		tile->addObj(p);
 		activeScene->addPiece(p);
 		break;
-	case HEAVY:
+	case ADVANCED:
 		break;
-	case SLOW:
+	case ELITE:
 		break;
+	default:
+		break;
+	}
+
+}
+
+void Manager::upgradePieceInTile(int index)
+{
+	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
+	Piece* p;
+	Texture* tex = new Texture2D();
+	int type = tile->getRank();
+
+	switch (type)
+	{
+	case STARTER:
+		PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
+		tex->load("..\\textures\\Tower_Normal.psd");
+		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
+		p->translate(tile->getPos());
+		activeScene->removePiece(tile->getObjectID());
+		tile->upgradePiece(p);
+		activeScene->addPiece(p);
+		break;
+
+	case ADVANCED:
+		PieceReader::getInstance().readObject("..\\objects\\lightEliteTower.obj");
+		tex->load("..\\textures\\Tower_Normal.psd");
+		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
+		p->translate(tile->getPos());
+		activeScene->removePiece(tile->getObjectID());
+		tile->upgradePiece(p);
+		activeScene->addPiece(p);
+		break;
+
+	case ELITE:
+		break;
+
 	default:
 		break;
 	}

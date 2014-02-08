@@ -10,7 +10,7 @@
 #include "Interface.h"
 #include "Texture2D.h"
 
-enum towerTypes {NORMAL, HEAVY, SLOW};
+enum towerTypes { NORMAL, HEAVY, SLOW };
 
 class Manager
 {
@@ -36,6 +36,7 @@ public:
 	void tilesRayPick(float x, float y);
 
 	void addPieceToTile(int index, int type);
+	void upgradePieceInTile(int index);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 

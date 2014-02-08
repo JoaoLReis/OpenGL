@@ -20,6 +20,19 @@ void Scene::addPiece(Piece *p)
 	pieces->push_back(p);
 }
 
+void Scene::removePiece(int id)
+{
+	int numIter = 0;
+	for (std::vector<Piece*>::iterator it = pieces->begin(); it != pieces->end(); ++it)
+	{
+		if ((*it)->getID() == id){
+			pieces->erase(pieces->begin() + numIter);
+			break;
+		}
+		numIter++;
+	}
+}
+
 Piece* Scene::getPiece(int index)
 {
 	return pieces->at(index);

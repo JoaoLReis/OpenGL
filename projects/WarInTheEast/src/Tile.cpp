@@ -8,6 +8,7 @@ Tile::Tile(glm::vec3 position)
 	oldtype = DEFAULT;
 	pos = glm::vec3(position.x + TILESIZE/2.0f, position.y + TILESIZE/2.0f, position.z);
 	gameObject = NULL;
+	rank = 0;
 }
 
 std::vector<Tile*>* Tile::getAdj()
@@ -30,6 +31,16 @@ int Tile::getOldType()
 	return oldtype; 
 }
 
+int Tile::getRank()
+{
+	return rank;
+}
+
+int Tile::getObjectID()
+{
+	return gameObject->getID();
+}
+
 bool Tile::hasObject()
 {
 	if (gameObject == NULL)
@@ -50,12 +61,27 @@ void Tile::addAdj(Tile* tile)
 
 void Tile::addObj(Piece* piece)
 {
+	rank = STARTER;
 	gameObject = piece;
 }
 
 void Tile::removeObj()
 {
+	delete(gameObject);
 	gameObject = NULL;
+	rank = 0;
+}
+
+void Tile::upgradePiece(Piece* piece)
+{
+	if (rank != ELITE){
+		delete(gameObject);
+		gameObject = piece;
+		rank++;
+	}
+	else
+		std::cout << "Tower fully upgraded" << std::endl;
+
 }
 
 Tile::~Tile()
