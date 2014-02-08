@@ -37,7 +37,7 @@
 #define FRAMES_PER_SECOND 60
 
 #define NUMTILESX 30
-#define NUMTILESY 20
+#define NUMTILESY 40
 #define TILESIZE 1
 
 /*static const glm::vec3 ligthpos = glm::vec3(0.0, 0.0, 5.0);
