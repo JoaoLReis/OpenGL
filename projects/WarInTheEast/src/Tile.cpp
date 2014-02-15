@@ -9,6 +9,7 @@ Tile::Tile(glm::vec3 position)
 	pos = glm::vec3(position.x + TILESIZE/2.0f, position.y + TILESIZE/2.0f, position.z);
 	gameObject = NULL;
 	rank = 0;
+	heuristic = 0;
 }
 
 std::vector<Tile*>* Tile::getAdj()
@@ -54,12 +55,29 @@ void Tile::setType(int newtype)
 	type = newtype;
 }
 
+bool Tile::isObjective()
+{
+	if (type == EXIT)
+		return true;
+	else return false;
+}
+
+float Tile::getHeuristic()
+{
+	return heuristic;
+}
+
+void Tile::setHeuristic(float v)
+{
+	heuristic = v;
+}
+
 void Tile::addAdj(Tile* tile)
 {
 	adj->push_back(tile);
 }
 
-void Tile::addObj(Piece* piece)
+void Tile::addObj(PieceInstance* piece)
 {
 	rank = STARTER;
 	gameObject = piece;
@@ -72,7 +90,7 @@ void Tile::removeObj()
 	rank = 0;
 }
 
-void Tile::upgradePiece(Piece* piece)
+void Tile::upgradePiece(PieceInstance* piece)
 {
 	if (rank != ELITE){
 		delete(gameObject);

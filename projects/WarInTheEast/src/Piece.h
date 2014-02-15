@@ -4,12 +4,21 @@
 #include "Vertex.h"
 #include "Textures.h"
 #include "ShaderProgram.h"
+#include "Drawable.h"
 
-class Piece
+class Piece : public Drawable
 {
 
 protected:
 	int id;
+
+	/*Variation on the current move towards the objective.*/
+	float variation;
+	/*Objective to move towards, changed by the method move.*/
+	glm::vec3 objective;
+	/*Boolean to check if piece is moving*/
+	bool moving;
+
 	glm::fquat orientation;
 	glm::mat4 scale;
 	glm::mat4 initTransformation;
@@ -29,7 +38,18 @@ public:
 	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, int ident);
 	Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, Texture* t, int ident);
 
+	Drawable* clone();
+
+	void prepareDraw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
+	void sendModelMatrix(glm::mat4 viewMatrix, glm::mat4 modelMatrix);
+	void bindDraw();
+	void postDraw();
+	void handleMovement();
+
+	virtual void move(float x, float y, float z);
+	virtual void rotate();
+	
 	void createBufferObject();
 	void addIndex(unsigned int v);
 
@@ -37,8 +57,14 @@ public:
 	
 	void setId(int id);
 	void setColor();
+	void setOrientation(glm::fquat orientation);
+	void setTransformation(glm::mat4 transformation);
+
+	glm::fquat getOrientation();
+	glm::mat4 getTransformation();
 
 	void translate(glm::vec3 vec);
+	void reset();
 
 	glm::mat4 createModelMatrix();
 };

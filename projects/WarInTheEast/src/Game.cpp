@@ -32,9 +32,14 @@ void Game::OnLoop()
 
 void Game::OnRender()
 {
+	//int start = SDL_GetTicks();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//int start = SDL_GetTicks();
 	manager->draw();
+	//int eventtime = SDL_GetTicks() - start;
 	SDL_GL_SwapWindow(window);
+	//int eventtime = SDL_GetTicks() - start;
+	
 }
 
 bool Game::OnEvent(SDL_Event* Event)
@@ -121,6 +126,10 @@ bool Game::OnOpenglInit()
 
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
 	return true;
 }
 
@@ -128,6 +137,7 @@ bool Game::OnGameInit()
 {
 	manager = new Manager();
 	eventHandler = new EventHandler(manager);
+	GameData::getInstance().GameDataInit();
 	return true;
 }
 
@@ -162,7 +172,7 @@ int Game::OnExecute()
 				break;
 		}
 
-		OnLoop();
+		//OnLoop();
 		OnRender();
 
 		end = SDL_GetTicks() - start;
@@ -170,6 +180,7 @@ int Game::OnExecute()
 		{
 			SDL_Delay(1000 / FRAMES_PER_SECOND - end);
 		}
+		GameData::getInstance().updateFrame(GameData::getInstance().getFrame() + 1);
 	}
 
 	Cleanup();

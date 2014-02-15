@@ -43,17 +43,11 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{46a3e17a-39f4-4769-a423-9b4bf49030cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Drawables\Tiles">
-      <UniqueIdentifier>{27c090a6-76ef-4ace-af65-59beded41518}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Drawables\Interface">
       <UniqueIdentifier>{a41d20b7-f5dd-4f91-b2a3-2da54027bb74}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Drawables\Pieces">
       <UniqueIdentifier>{fb1e9e97-10d4-4aea-8abb-f2d2fe338158}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Drawables\Texture">
-      <UniqueIdentifier>{67a4793f-cb73-492b-80bd-fcb8b5977193}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Drawables\Interface">
       <UniqueIdentifier>{89b1c505-aaaa-4195-a7b5-50d30ba05bf4}</UniqueIdentifier>
@@ -61,10 +55,16 @@
     <Filter Include="Source Files\Drawables\Pieces">
       <UniqueIdentifier>{572a5aa8-2ba0-41e9-8d87-6b24d7b9e641}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Drawables\Texture">
+    <Filter Include="Header Files\Texture">
+      <UniqueIdentifier>{67a4793f-cb73-492b-80bd-fcb8b5977193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Texture">
       <UniqueIdentifier>{bf31da14-6e1f-4c16-8c67-ddbf57f978bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Drawables\Tiles">
+    <Filter Include="Header Files\Drawables\Pieces\Tiles">
+      <UniqueIdentifier>{27c090a6-76ef-4ace-af65-59beded41518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Drawables\Pieces\Tiles">
       <UniqueIdentifier>{7570e074-6b92-46bf-8379-8bcfe0432fc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -106,16 +106,28 @@
       <Filter>Source Files\Drawables\Pieces</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture2D.cpp">
-      <Filter>Source Files\Drawables\Texture</Filter>
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Textures.cpp">
-      <Filter>Source Files\Drawables\Texture</Filter>
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Source Files\Drawables\Tiles</Filter>
+      <Filter>Source Files\Drawables\Pieces\Tiles</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TileGrid.cpp">
-      <Filter>Source Files\Drawables\Tiles</Filter>
+      <Filter>Source Files\Drawables\Pieces\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PieceInstance.cpp">
+      <Filter>Source Files\Drawables\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PieceAggregate.cpp">
+      <Filter>Source Files\Drawables\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameData.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Spawner.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,10 +156,10 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Tile.h">
-      <Filter>Header Files\Drawables\Tiles</Filter>
+      <Filter>Header Files\Drawables\Pieces\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TileGrid.h">
-      <Filter>Header Files\Drawables\Tiles</Filter>
+      <Filter>Header Files\Drawables\Pieces\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Interface.h">
       <Filter>Header Files\Drawables\Interface</Filter>
@@ -162,10 +174,25 @@
       <Filter>Header Files\Drawables\Pieces</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Texture2D.h">
-      <Filter>Header Files\Drawables\Texture</Filter>
+      <Filter>Header Files\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Textures.h">
-      <Filter>Header Files\Drawables\Texture</Filter>
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Drawable.h">
+      <Filter>Header Files\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PieceInstance.h">
+      <Filter>Header Files\Drawables\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PieceAggregate.h">
+      <Filter>Header Files\Drawables\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameData.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Spawner.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,16 +229,5 @@
     <None Include="..\objects\lightNormalTower.mtl">
       <Filter>Resource Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="..\objects\lightAdvancedTower.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-    <Object Include="..\objects\lightEliteTower.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-    <Object Include="..\objects\lightNormalTower.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
   </ItemGroup>
 </Project>

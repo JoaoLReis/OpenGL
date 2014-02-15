@@ -13,16 +13,19 @@ bool EventHandler::handle(SDL_Event* Event)
 	if (Event->type == SDL_WINDOWEVENT_RESIZED)
 	{
 		glViewport(0, 0, Event->window.data1, Event->window.data2);
+		return true;
 	}
 	else
 	if (Event->type == SDL_QUIT)
 	{
 		quitEvent = true;
+		return true;
 	}
 	else
 	if (Event->type == SDL_MOUSEWHEEL)
 	{
 		manager->updateCameraZoom(Event->wheel.y);
+		return true;
 	}
 	else
 	if (Event->type == SDL_KEYDOWN)
@@ -59,7 +62,7 @@ bool EventHandler::handle(SDL_Event* Event)
 		else if (Event->key.keysym.sym == SDLK_UP)
 		{
 			int selected = manager->getScene()->getTileGrid()->whichSelected();
-			if (selected + NUMTILESX < 600)
+			if (selected + NUMTILESX < (NUMTILESX * NUMTILESY))
 				manager->getScene()->getTileGrid()->setSelected(selected + NUMTILESX);
 			
 		}
@@ -128,7 +131,6 @@ bool EventHandler::handle(SDL_Event* Event)
 		}
 		manager->updateLastMXY(x, y);
 	}
-
 	return false;
 }
 

@@ -16,8 +16,8 @@ public:
 	Camera();
 	~Camera(void);
 
-	void setLast_mx(int x);
-	void setLast_my(int y);
+	void setLast_mx(float x);
+	void setLast_my(float y);
 	void setRotationAngleX(float x);
 	void setRotationAngleY(float y);
 	void setCenter(glm::vec3 v);

@@ -9,6 +9,7 @@ TileGrid::TileGrid (std::vector<Vertex> vs,
 {
 	tiles = totaltiles;
 	selected = -1;
+	tex = 0;
 }
 
 void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)
@@ -44,6 +45,16 @@ void TileGrid::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 
 				glUniform1i(glGetUniformLocation(progID, "selected"), true);
 			else
 				glUniform1i(glGetUniformLocation(progID, "selected"), false);
+			if (tex != 0)
+			{
+				tex->actBindTexture();
+				glUniform1f(glGetUniformLocation(progID, "textured"), true);
+				glUniform1i(glGetUniformLocation(progID, "Texture0"), 0);
+			}
+			else
+			{
+				glUniform1f(glGetUniformLocation(progID, "textured"), false);
+			}
 			glUniform1i(glGetUniformLocation(progID, "type"), getTile(numT)->getType());
 			glDrawElementsBaseVertex(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, (void*)0, i);
 		}
@@ -63,6 +74,7 @@ bool TileGrid::checkClick(glm::vec4 from, glm::vec3 direction)
 	float index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
 	if (pos.x >= 0.0f && pos.y >= 0.0f && pos.x <= NUMTILESX && pos.y <= NUMTILESY)
 	{
+		std::cout << "returning tile at position-> " << tiles.at(index)->getPos().x << " ; " << tiles.at(index)->getPos().y << std::endl;
 		setSelected(index);
 		return true;
 	}

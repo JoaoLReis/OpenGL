@@ -1,7 +1,7 @@
 #pragma once
-#include "Piece.h"
+#include "PieceInstance.h"
 
-enum type { BUILD, MOVEMENT, DEFAULT };
+enum type { BUILD, MOVEMENT, DEFAULT, ENTRY, EXIT, SPAWN, VISITED };
 enum towerRank { STARTER, ADVANCED, ELITE};
 
 class Tile
@@ -10,9 +10,9 @@ class Tile
 	glm::vec3 pos;
 	
 	int type, oldtype, rank;
+	float heuristic;
 
-	Piece* gameObject;
-
+	PieceInstance* gameObject;
 
 public:
 	Tile();
@@ -25,14 +25,17 @@ public:
 	int getId();
 	int getRank();
 	int getObjectID();
+	float getHeuristic();
+	bool isObjective();
 	bool hasObject();
 
+	void setHeuristic(float v);
 	void setType(int newtype);
 	void addAdj(Tile* tile);
-	void addObj(Piece* piece);
+	void addObj(PieceInstance* piece);
 	void removeObj();
 
-	void upgradePiece(Piece* piece);
+	void upgradePiece(PieceInstance* piece);
 
 	virtual ~Tile();
 };

@@ -7,9 +7,15 @@ Manager::Manager()
 	camera->setCenter(glm::vec3(-NUMTILESX / 2, -NUMTILESY / 2, -40.0f));
 	camera->updateCamera();
 	mapList = new std::vector<Scene*>;
-
-	initMapList();
-	initInterface();
+	preloadedObjs = new std::vector<Piece*>;
+	PieceReader::getInstance().init();
+	ShaderProgram* sh = createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl");
+	ShaderProgram* sh2D = createShaderProgram("..\\shaders\\vertex_shader_2d.glsl", "..\\shaders\\fragment_shader_2d.glsl");
+	starter = 0;
+	obj = 0;
+	initInterface(sh2D);
+	initMapList(sh);
+	preLoadPieces(sh);
 }
 
 void Manager::tilesRayPick(float x, float y)
@@ -38,6 +44,42 @@ void Manager::tilesRayPick(float x, float y)
 	int uiElem = interface->checkClick(mouse);
 	if (uiElem == -1)
 		activeScene->getTileGrid()->checkClick(from, direction);
+	else if (uiElem == SPAWN)
+	{
+		if (activeScene->getTileGrid()->whichSelected() != -1)
+		{
+			if (starter != NULL && obj != NULL)
+			{
+				Spawner* s = new Spawner(starter, obj);
+			}
+		}
+	}
+	else if (uiElem == ENTRY)
+	{
+		if (activeScene->getTileGrid()->whichSelected() != -1) 
+		{
+			activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(ENTRY);
+			if (starter != NULL)
+			{
+				starter->setType(DEFAULT);
+				starter = activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected());
+			} 
+			else starter = activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected());
+		}
+	}
+	else if (uiElem == EXIT)
+	{
+		if (activeScene->getTileGrid()->whichSelected() != -1) 
+		{
+			activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected())->setType(EXIT);
+			if (obj != NULL)
+			{
+				obj->setType(DEFAULT);
+				obj = activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected());
+			}
+			else obj = activeScene->getTileGrid()->getTile(activeScene->getTileGrid()->whichSelected());
+		}
+	}
 	else if (uiElem == BUILD)
 	{
 		if (activeScene->getTileGrid()->whichSelected() != -1)
@@ -107,124 +149,19 @@ ShaderProgram* Manager::createShaderProgram(std::string vertexShaderPath, std::s
 	return shProg;
 }
 
-void Manager::initMapList()
+void Manager::initMapList(ShaderProgram* sh)
 { 
-	activeScene = initMap1(); 
+	activeScene = initMap1(sh);
 	/*...etc...**/
 }
 
-Scene *Manager::initMap1()
+Scene *Manager::initMap1(ShaderProgram* shProg)
 {
-	Piece* p;
-	PieceReader::getInstance().init();
-	std::vector<Piece*> *ps = new std::vector<Piece*>;
+	//Piece* p;
+	std::vector<Drawable*> *ps = new std::vector<Drawable*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
 	std::vector<unsigned int> *is = new std::vector<unsigned int>;
 	Scene* scene = new Scene(ps);
-	ShaderProgram *shProg = createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl");
-
-	/*
-	+++++++++++++++++++++++++++++++++++++++++++ PREFAB ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	*/
-	/** /
-	Vertex v = *(new Vertex());
-	float size = 0.5;
-
-	v.XYZW = glm::vec4(size, size, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 2
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 1
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f); // 0 - FRONT
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 0
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 3
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, 1.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 2
-	vs->push_back(v);
-
-	v.XYZW = glm::vec4(size, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 6
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 5
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 1 - RIGHT
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 1
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 2
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 6
-	vs->push_back(v);
-
-	v.XYZW = glm::vec4(0.0f, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 7
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 6
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 2 - TOP
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 2
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, size, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 3
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 7
-	vs->push_back(v);
-
-	v.XYZW = glm::vec4(0.0f, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 7
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 4
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 5 - BACK
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 5
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 6
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.0f, 0.9f, 0.9f, 1.0f), v.NORMAL = glm::vec4(0.0f, 0.0, -1.0, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 7
-	vs->push_back(v);
-
-
-	v.XYZW = glm::vec4(0.0f, size, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 3
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 0
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 4 - LEFT
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 4
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 7
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, size, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.0f, 0.9f, 1.0f), v.NORMAL = glm::vec4(-1.0f, 0.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 3
-	vs->push_back(v);
-
-	v.XYZW = glm::vec4(size, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 5
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 1.0f);  // 4
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 0 - BOTTOM
-	vs->push_back(v);
-	v.XYZW = glm::vec4(0.0f, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(0.0f, 1.0f);  // 0
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, size, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 1
-	vs->push_back(v);
-	v.XYZW = glm::vec4(size, 0.0f, 0.0f, 1.0f), v.RGBA = glm::vec4(0.9f, 0.9f, 0.0f, 1.0f), v.NORMAL = glm::vec4(0.0f, -1.0, 0.0f, 1.0f), v.UV = glm::vec2(1.0f, 0.0f);  // 5
-	vs->push_back(v);
-
-	for (int i = 0; i <= 35; i++)
-	{
-		is->push_back(i);
-	}
-
-	Piece *p = new Piece(*vs, *is, shProg);
-	ps->push_back(p);
-
-	vs->clear();
-	is->clear();
-
-	/**/
-
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++  GRID  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 
 	Vertex vert = *(new Vertex());
 	float size = TILESIZE;
@@ -261,50 +198,100 @@ Scene *Manager::initMap1()
 		}
 	}
 
-	for (int l = 0; l < tilevertexes->size(); l++)
+	for (unsigned int l = 0; l < tilevertexes->size(); l++)
 	{
 		tileindexes->push_back(l);
+	}
+
+	glm::vec3 pos;
+	float index, index0, index1, index2, index3;
+	for (std::vector<Tile*>::iterator it = totaltiles->begin(); it != totaltiles->end(); ++it)
+	{
+		pos = (*it)->getPos();
+		index = std::floor(pos.x) + std::floor(pos.y)*NUMTILESX;
+
+		index0 = std::floor(pos.x + TILESIZE) + std::floor(pos.y)*NUMTILESX;
+		if (index0 < NUMTILESX * NUMTILESY)
+			(*it)->addAdj(totaltiles->at(index0));
+
+		index1 = std::floor(pos.x - TILESIZE) + std::floor(pos.y)*NUMTILESX;
+		if (index1 >= 0 )
+			(*it)->addAdj(totaltiles->at(index1));
+
+		index2 = std::floor(pos.x) + std::floor(pos.y + TILESIZE)*NUMTILESX;
+		if (index2 < NUMTILESX * NUMTILESY)
+			(*it)->addAdj(totaltiles->at(index2));
+
+		index3 = std::floor(pos.x) + std::floor(pos.y - TILESIZE)*NUMTILESX;
+		if (index3 >= 0 )
+			(*it)->addAdj(totaltiles->at(index3));
 	}
 
 	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, *totaltiles, scene->getId());
 	ps->push_back(tgrid);
 
-	totaltiles->clear();
-	tileindexes->clear();
-	tilevertexes->clear();
-
-	/*
-	+++++++++++++++++++++++++++++++++++++++++++++++ CYLINDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	*/
-	/** /
-	PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
-	
-	*vs = PieceReader::getInstance().getVertices();
-	*is = PieceReader::getInstance().getIndices();
-	p = new Piece(*vs, *is, shProg, scene->getId()); 
-	ps->push_back(p);
-
-	PieceReader::getInstance().clearAll();
-	vs->clear();
-	is->clear();
-	
-	/**/
-	/*
-	+++++++++++++++++++++++++++++++++++++++++++++++           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	*/
-
 	return(scene);
 }
 
-void Manager::initInterface()
+void Manager::initInterface(ShaderProgram* sh)
 {
-	ShaderProgram *sh = createShaderProgram("..\\shaders\\vertex_shader_2d.glsl", "..\\shaders\\fragment_shader_2d.glsl");
 	Vertex vert = *(new Vertex());
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
 	std::vector<Vertex> *tmp = new std::vector<Vertex>;
 	std::vector<unsigned int> *is = new std::vector<unsigned int>;
 	std::vector<UiElement> *ui = new std::vector<UiElement>;
 	Texture* tex;
+
+	vert.XYZW = glm::vec4(-1.0, 0.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, 0.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, 0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, 0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	tex = new Texture2D();
+	tex->load("..\\textures\\Spawn_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, SPAWN));
+	tmp->clear();
+
+	vert.XYZW = glm::vec4(-1.0, -0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, -0.0, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	tex = new Texture2D();
+	tex->load("..\\textures\\Entry_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, ENTRY));
+	tmp->clear();
+
+	vert.XYZW = glm::vec4(-1.0, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.4, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 0.0f);  // 3
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-0.8, -0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(1.0f, 1.0f); // 0 - FRONT
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	vert.XYZW = glm::vec4(-1.0, -0.2, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 1.0f);  // 1
+	vs->push_back(vert);
+	tmp->push_back(vert);
+	tex = new Texture2D();
+	tex->load("..\\textures\\Exit_Pick.psd");
+	ui->push_back(*new UiElement(*tmp, tex, EXIT));
+	tmp->clear();
 
 	vert.XYZW = glm::vec4(-1.0, -0.6, 0.0f, 1.0f), vert.RGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), vert.NORMAL = glm::vec4(0.0f, 1.0, 0.0f, 1.0f), vert.UV = glm::vec2(0.0f, 0.0f);  // 2
 	vs->push_back(vert);
@@ -357,12 +344,35 @@ void Manager::initInterface()
 	ui->push_back(*new UiElement(*tmp, tex, DEFAULT));
 	tmp->clear();
 
-	for (int j = 0; j < vs->size(); j++)
+	for (unsigned int j = 0; j < vs->size(); j++)
 	{
 		is->push_back(j);
 	}
 	
 	interface = new Interface(*vs, *is, *ui, sh);
+}
+
+void Manager::preLoadPieces(ShaderProgram* sh)
+{
+	Texture* tex = new Texture2D();
+	PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
+	tex->load("..\\textures\\Tower_Normal.psd");
+	Piece *p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -1);
+	preloadedObjs->push_back(p);
+	PieceReader::getInstance().clearAll();
+	x = new PieceAggregate(p);
+	activeScene->addPiece(x);
+	/*PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
+	tex->load("..\\textures\\Tower_Normal.psd");
+	p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -2);
+	preloadedObjs->push_back(p);
+	PieceReader::getInstance().clearAll();
+
+	PieceReader::getInstance().readObject("..\\objects\\lightEliteTower.obj");
+	tex->load("..\\textures\\Tower_Normal.psd");
+	p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -2);
+	preloadedObjs->push_back(p);
+	PieceReader::getInstance().clearAll();*/
 }
 
 Scene* Manager::getScene()
@@ -440,19 +450,22 @@ void Manager::loadTileGrid()
 
 void Manager::addPieceToTile(int index, int type)
 {
+	PieceInstance* p;
 	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
-	Piece* p;
 	Texture* tex = new Texture2D();
 	switch (type)
 	{
 
 	case STARTER:
-		PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
-		tex->load("..\\textures\\Tower_Normal.psd");
-		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, activeScene->getId());
-		p->translate(tile->getPos());
-		tile->addObj(p);
-		activeScene->addPiece(p);
+		if (!tile->hasObject())
+		{
+			p = new PieceInstance(preloadedObjs->at(0), preloadedObjs->at(0)->getOrientation(), preloadedObjs->at(0)->getTransformation());
+			p->setID(activeScene->getId());
+			p->reset();
+			p->translate(tile->getPos());
+			tile->addObj(p);
+			x->addPiece(p);
+		}
 		break;
 	case ADVANCED:
 		break;
@@ -467,30 +480,30 @@ void Manager::addPieceToTile(int index, int type)
 void Manager::upgradePieceInTile(int index)
 {
 	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
-	Piece* p;
+	//Piece* p;
 	Texture* tex = new Texture2D();
 	int type = tile->getRank();
 
 	switch (type)
 	{
 	case STARTER:
-		PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
+		/*PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
 		tex->load("..\\textures\\Tower_Normal.psd");
 		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
 		p->translate(tile->getPos());
 		activeScene->removePiece(tile->getObjectID());
 		tile->upgradePiece(p);
-		activeScene->addPiece(p);
+		activeScene->addPiece(p);*/
 		break;
 
 	case ADVANCED:
-		PieceReader::getInstance().readObject("..\\objects\\lightEliteTower.obj");
+		/*PieceReader::getInstance().readObject("..\\objects\\lightEliteTower.obj");
 		tex->load("..\\textures\\Tower_Normal.psd");
 		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
 		p->translate(tile->getPos());
 		activeScene->removePiece(tile->getObjectID());
 		tile->upgradePiece(p);
-		activeScene->addPiece(p);
+		activeScene->addPiece(p);*/
 		break;
 
 	case ELITE:

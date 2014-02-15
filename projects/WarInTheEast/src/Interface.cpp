@@ -3,7 +3,7 @@
 Interface::Interface (std::vector<Vertex> vs, 
 					  std::vector<unsigned int> is,
 					  std::vector<UiElement> elems,
-					  ShaderProgram* prog) 
+					  ShaderProgram* prog) : Drawable()
 {
 	vertexes = vs;
 	indices = is;
@@ -42,9 +42,7 @@ void Interface::createBufferObject()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glDisableVertexAttribArray(VERTICES);
-	glDisableVertexAttribArray(COLORS);
-	glDisableVertexAttribArray(NORMALS);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Interface::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)

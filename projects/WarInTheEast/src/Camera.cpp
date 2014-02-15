@@ -70,12 +70,12 @@ void Camera::setCenter(glm::vec3 v)
 	updateCamera();
 }
 
-void Camera::setLast_mx(int x)
+void Camera::setLast_mx(float x)
 {
 	last_mx = x;
 }
 
-void Camera::setLast_my(int y)
+void Camera::setLast_my(float y)
 {
 	last_my = y;
 }

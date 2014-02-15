@@ -64,12 +64,18 @@ void main(void)
 	else 
 	if(!selected)
 	{
-	if(type == 0)
-		colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(0.0, 1.0, 0.0, 1.0);
-	if(type == 1)
-		colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(0.0, 0.0, 1.0, 1.0);
-	if(type == 2)
-		colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * ex_Color;
+		if(type == 0)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(0.0, 1.0, 0.0, 1.0);
+		if(type == 1)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(0.0, 0.0, 1.0, 1.0);
+		if(type == 2)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * ex_Color;
+		if(type == 3)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(0.0, 1.3, 1.0, 1.0);
+		if(type == 4)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(1.3, 0.0, 1.0, 1.0);
+		if(type == 7)
+			colorOut = vec4((ambient + (diffuse + specular) * attenuation),1.0) * vec4(1.3, 1.0, 1.0, 1.0);
 	}
 	else
 		colorOut = ex_Color;

@@ -4,20 +4,21 @@
 #include "ShaderProgram.h"
 #include "Piece.h"
 #include "TileGrid.h"
+#include "Drawable.h"
 
 class Scene
 {
 	int globalId;
-	std::vector<Piece*>* pieces;
+	std::vector<Drawable*>* pieces;
 
 public:
-	Scene(std::vector<Piece*>* v);
+	Scene(std::vector<Drawable*>* v);
 	
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraCenter);
-	void addPiece(Piece *p);
+	void addPiece(Drawable *p);
 	void removePiece(int id);
 
-	Piece* getPiece(int index);
+	Drawable* getPiece(int index);
 
 	int getId();
 

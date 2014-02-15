@@ -9,6 +9,9 @@
 #include "TileGrid.h"
 #include "Interface.h"
 #include "Texture2D.h"
+#include "PieceInstance.h"
+#include "PieceAggregate.h"
+#include "Spawner.h"
 
 enum towerTypes { NORMAL, HEAVY, SLOW };
 
@@ -18,17 +21,20 @@ private:
 
 	Camera *camera;
 	std::vector<Scene*> *mapList;
+	std::vector<Piece*> *preloadedObjs;
 	Scene* activeScene;
-
 	Interface* interface;
+	PieceAggregate* x;
+	Tile* starter, *obj;
 
 public:
 
 	Manager();
 
 	void draw();
-	void initMapList();
-	void initInterface();
+	void initMapList(ShaderProgram* sh);
+	void initInterface(ShaderProgram* sh);
+	void preLoadPieces(ShaderProgram* sh);
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);
@@ -42,7 +48,7 @@ public:
 
 	Scene* getScene();
 
-	Scene *initMap1();
+	Scene *initMap1(ShaderProgram* sh);
 
 
 

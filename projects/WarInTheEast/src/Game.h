@@ -2,6 +2,7 @@
 
 #include "Includes.h"
 #include "EventHandler.h"
+#include "GameData.h"
 #include <time.h> 
 
 class Game
@@ -13,8 +14,6 @@ private:
 
 	Manager* manager;
 	EventHandler* eventHandler;
-
-	int frame;
 
 public:
 	Game();
