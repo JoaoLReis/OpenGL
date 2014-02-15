@@ -14,6 +14,8 @@ from the adjacent list of a single tile,
 based on the smalest distance to it.*/
 void Spawner::calculatePath(std::vector<Tile*> toSearch)
 {
+	if (toSearch.empty())
+		return;
 	float heuristic = 9999, tmp = 0;
 	Tile* chosen = toSearch.at(0);
 	Tile* starter = toSearch.at(0);
