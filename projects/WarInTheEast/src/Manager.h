@@ -12,6 +12,8 @@
 #include "PieceInstance.h"
 #include "PieceAggregate.h"
 #include "Spawner.h"
+#include "Tower.h"
+#include "Enemy.h"
 
 enum towerTypes { NORMAL, HEAVY, SLOW };
 

@@ -129,6 +129,12 @@
     <ClCompile Include="..\src\Spawner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Tower.cpp">
+      <Filter>Source Files\Drawables\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Source Files\Drawables\Pieces</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Includes.h">
@@ -194,6 +200,15 @@
     <ClInclude Include="..\src\Spawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Enemy.h">
+      <Filter>Header Files\Drawables\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tower.h">
+      <Filter>Header Files\Drawables\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Movable.h">
+      <Filter>Header Files\Drawables\Pieces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shaders\fragment_shader.glsl">
@@ -229,5 +244,6 @@
     <None Include="..\objects\lightNormalTower.mtl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

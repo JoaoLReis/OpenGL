@@ -16,8 +16,6 @@ protected:
 	float variation;
 	/*Objective to move towards, changed by the method move.*/
 	glm::vec3 objective;
-	/*Boolean to check if piece is moving*/
-	bool moving;
 
 	glm::fquat orientation;
 	glm::mat4 scale;
@@ -45,11 +43,7 @@ public:
 	void sendModelMatrix(glm::mat4 viewMatrix, glm::mat4 modelMatrix);
 	void bindDraw();
 	void postDraw();
-	void handleMovement();
 
-	virtual void move(float x, float y, float z);
-	virtual void rotate();
-	
 	void createBufferObject();
 	void addIndex(unsigned int v);
 

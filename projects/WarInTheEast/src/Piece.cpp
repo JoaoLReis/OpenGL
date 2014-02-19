@@ -14,7 +14,6 @@ Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram
 	createBufferObject();
 	tex = 0;
 	variation = 0.0;
-	moving = false;
 }
 
 Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram* prog, Texture* t, int ident) : Drawable()
@@ -29,7 +28,6 @@ Piece::Piece(std::vector<Vertex> vs, std::vector<unsigned int> is, ShaderProgram
 	tex = t;
 	createBufferObject();
 	variation = 0.0;
-	moving = false;
 }
 
 Drawable* Piece::clone()
@@ -133,9 +131,10 @@ void Piece::postDraw()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
+/** /
 void Piece::handleMovement()
 {
-	/*Current position of the object.*/
+	//Current position of the object.
 	glm::vec4 currentPos = glm::vec4(0.0, 0.0, 0.0, 1.0);
 	currentPos = currentPos * transformation;
 
@@ -158,29 +157,17 @@ void Piece::handleMovement()
 		}
 	}
 }
+/**/
 
 void Piece::draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye)
 {
 	prepareDraw(viewMatrix, projectionMatrix);
-
-	handleMovement();
 
 	sendModelMatrix(viewMatrix, createModelMatrix());
 
 	bindDraw();
 
 	postDraw();
-}
-
-void Piece::move(float x, float y, float z)
-{
-	moving = true;
-	objective = glm::vec3(x, y, z);
-}
-
-void Piece::rotate()
-{
-
 }
 
 void Piece::addIndex(unsigned int v)

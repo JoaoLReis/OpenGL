@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Enemy.cpp" />
     <ClCompile Include="..\src\EventHandler.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameData.cpp" />
@@ -29,18 +30,21 @@
     <ClCompile Include="..\src\Textures.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\TileGrid.cpp" />
+    <ClCompile Include="..\src\Tower.cpp" />
     <ClCompile Include="..\src\UiElement.cpp" />
     <ClCompile Include="..\src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Drawable.h" />
+    <ClInclude Include="..\src\Enemy.h" />
     <ClInclude Include="..\src\EventHandler.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\GameData.h" />
     <ClInclude Include="..\src\Includes.h" />
     <ClInclude Include="..\src\Interface.h" />
     <ClInclude Include="..\src\Manager.h" />
+    <ClInclude Include="..\src\Movable.h" />
     <ClInclude Include="..\src\Piece.h" />
     <ClInclude Include="..\src\PieceAggregate.h" />
     <ClInclude Include="..\src\PieceInstance.h" />
@@ -52,6 +56,7 @@
     <ClInclude Include="..\src\Textures.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileGrid.h" />
+    <ClInclude Include="..\src\Tower.h" />
     <ClInclude Include="..\src\UiElement.h" />
     <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
@@ -67,6 +72,7 @@
     <None Include="..\textures\Default_Pick.psd" />
     <None Include="..\textures\Movement_Pick.psd" />
     <None Include="..\textures\Tower_Normal.psd" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>

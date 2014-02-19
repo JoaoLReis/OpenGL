@@ -459,7 +459,7 @@ void Manager::addPieceToTile(int index, int type)
 	case STARTER:
 		if (!tile->hasObject())
 		{
-			p = new PieceInstance(preloadedObjs->at(0), preloadedObjs->at(0)->getOrientation(), preloadedObjs->at(0)->getTransformation());
+			p = new Tower(preloadedObjs->at(0), preloadedObjs->at(0)->getOrientation(), preloadedObjs->at(0)->getTransformation());
 			p->setID(activeScene->getId());
 			p->reset();
 			p->translate(tile->getPos());
