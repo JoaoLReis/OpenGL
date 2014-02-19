@@ -39,6 +39,7 @@ public:
 	void initInterface(ShaderProgram* sh);
 	void loadPiece(ShaderProgram* sh, std::string objpath, std::string texpath);
 	void preLoadPieces(ShaderProgram* sh);
+	void createEnemy(ShaderProgram* sh);
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);

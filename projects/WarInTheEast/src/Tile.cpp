@@ -10,6 +10,7 @@ Tile::Tile(glm::vec3 position)
 	gameObject = NULL;
 	rank = 0;
 	heuristic = 0;
+	f_heuristic = 0;
 }
 
 std::vector<Tile*>* Tile::getAdj()
@@ -67,9 +68,26 @@ float Tile::getHeuristic()
 	return heuristic;
 }
 
+float Tile::getf_Heuristic()
+{
+	return f_heuristic;
+}
+
+std::string Tile::getPosInString()
+{
+	std::ostringstream oss;
+	oss << pos.x << pos.y << pos.z;
+	return oss.str();
+}
+
 void Tile::setHeuristic(float v)
 {
 	heuristic = v;
+}
+
+void Tile::setf_Heuristic(float v)
+{
+	f_heuristic = v;
 }
 
 void Tile::addAdj(Tile* tile)

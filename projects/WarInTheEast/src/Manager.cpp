@@ -381,6 +381,26 @@ void Manager::preLoadPieces(ShaderProgram* sh)
 	p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -2);
 	preloadedObjs->push_back(p);
 	PieceReader::getInstance().clearAll();*/
+	createEnemy(sh);
+}
+
+void Manager::createEnemy(ShaderProgram* sh)
+{
+	Texture* tex = new Texture2D();
+	PieceReader::getInstance().readObject("..\\objects\\wisp.obj");
+	tex->load("..\\textures\\wisp.psd");
+	Piece *p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -1);
+	preloadedObjs->push_back(p);
+	PieceReader::getInstance().clearAll();
+	PieceAggregate* ap = new PieceAggregate(p);
+	activeScene->addPiece(ap);
+
+	PieceInstance *piece = new PieceInstance(preloadedObjs->at(1), preloadedObjs->at(1)->getOrientation(), preloadedObjs->at(1)->getTransformation());
+	piece->setID(activeScene->getId());
+	piece->reset();
+	piece->translate(glm::vec3(0.0, 0.0, 0.0));
+	//starter->addObj(piece);
+	ap->addPiece(piece);
 }
 
 Scene* Manager::getScene()

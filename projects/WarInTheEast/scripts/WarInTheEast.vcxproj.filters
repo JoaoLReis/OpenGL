@@ -129,11 +129,8 @@
     <ClCompile Include="..\src\Spawner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Tower.cpp">
-      <Filter>Source Files\Drawables\Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Enemy.cpp">
-      <Filter>Source Files\Drawables\Pieces</Filter>
+    <ClCompile Include="..\src\PathHolder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,14 +197,8 @@
     <ClInclude Include="..\src\Spawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Enemy.h">
-      <Filter>Header Files\Drawables\Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Tower.h">
-      <Filter>Header Files\Drawables\Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Movable.h">
-      <Filter>Header Files\Drawables\Pieces</Filter>
+    <ClInclude Include="..\src\PathHolder.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
