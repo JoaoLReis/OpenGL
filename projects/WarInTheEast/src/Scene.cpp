@@ -19,6 +19,12 @@ void Scene::addPiece(Drawable *p)
 	pieces->push_back(p);
 }
 
+void Scene::addPieceToAggregate(int agg, PieceInstance* p)
+{
+	PieceAggregate* aggregate = (PieceAggregate*)pieces->at(agg);
+	aggregate->addPiece(p);
+}
+
 void Scene::removePiece(int id)
 {
 	int numIter = 0;
@@ -30,6 +36,12 @@ void Scene::removePiece(int id)
 		}
 		numIter++;
 	}
+}
+
+void Scene::removePieceFromAggregate(int agg, int id)
+{
+	PieceAggregate* aggregate = (PieceAggregate*) pieces->at(agg);
+	aggregate->removePiece(id);
 }
 
 Drawable* Scene::getPiece(int index)

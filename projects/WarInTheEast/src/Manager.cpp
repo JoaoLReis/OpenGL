@@ -352,16 +352,24 @@ void Manager::initInterface(ShaderProgram* sh)
 	interface = new Interface(*vs, *is, *ui, sh);
 }
 
-void Manager::preLoadPieces(ShaderProgram* sh)
+void Manager::loadPiece(ShaderProgram* sh, std::string objpath, std::string texpath)
 {
 	Texture* tex = new Texture2D();
-	PieceReader::getInstance().readObject("..\\objects\\lightNormalTower.obj");
-	tex->load("..\\textures\\Tower_Normal.psd");
+	PieceReader::getInstance().readObject(objpath);
+	tex->load(texpath);
 	Piece *p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -1);
 	preloadedObjs->push_back(p);
 	PieceReader::getInstance().clearAll();
 	x = new PieceAggregate(p);
 	activeScene->addPiece(x);
+}
+
+void Manager::preLoadPieces(ShaderProgram* sh)
+{
+	loadPiece(sh, "..\\objects\\lightNormalTower.obj", "..\\textures\\Tower_Normal.psd");
+	loadPiece(sh, "..\\objects\\lightAdvancedTower.obj", "..\\textures\\Tower_Normal.psd");
+	loadPiece(sh, "..\\objects\\lightEliteTower.obj", "..\\textures\\Tower_Normal.psd");
+	
 	/*PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
 	tex->load("..\\textures\\Tower_Normal.psd");
 	p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -2);
@@ -459,6 +467,7 @@ void Manager::addPieceToTile(int index, int type)
 	case STARTER:
 		if (!tile->hasObject())
 		{
+			x = (PieceAggregate*) activeScene->getPiece(NORMAL_TOWER);
 			p = new Tower(preloadedObjs->at(0), preloadedObjs->at(0)->getOrientation(), preloadedObjs->at(0)->getTransformation());
 			p->setID(activeScene->getId());
 			p->reset();
@@ -480,30 +489,26 @@ void Manager::addPieceToTile(int index, int type)
 void Manager::upgradePieceInTile(int index)
 {
 	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
-	//Piece* p;
+	PieceInstance* p;
 	Texture* tex = new Texture2D();
 	int type = tile->getRank();
 
 	switch (type)
 	{
 	case STARTER:
-		/*PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
-		tex->load("..\\textures\\Tower_Normal.psd");
-		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
+		p = new Tower(preloadedObjs->at(1), preloadedObjs->at(1)->getOrientation(), preloadedObjs->at(1)->getTransformation());
 		p->translate(tile->getPos());
-		activeScene->removePiece(tile->getObjectID());
+		activeScene->removePieceFromAggregate(NORMAL_TOWER, tile->getObjectID());
 		tile->upgradePiece(p);
-		activeScene->addPiece(p);*/
+		activeScene->addPieceToAggregate(ADVANCED_TOWER, p);
 		break;
 
 	case ADVANCED:
-		/*PieceReader::getInstance().readObject("..\\objects\\lightEliteTower.obj");
-		tex->load("..\\textures\\Tower_Normal.psd");
-		p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), createShaderProgram("..\\shaders\\vertex_shader.glsl", "..\\shaders\\fragment_shader.glsl"), tex, tile->getObjectID());
+		p = new Tower(preloadedObjs->at(2), preloadedObjs->at(2)->getOrientation(), preloadedObjs->at(2)->getTransformation());
 		p->translate(tile->getPos());
-		activeScene->removePiece(tile->getObjectID());
+		activeScene->removePieceFromAggregate(ADVANCED_TOWER, tile->getObjectID());
 		tile->upgradePiece(p);
-		activeScene->addPiece(p);*/
+		activeScene->addPieceToAggregate(ELITE_TOWER, p);
 		break;
 
 	case ELITE:

@@ -5,6 +5,7 @@
 #include "Piece.h"
 #include "TileGrid.h"
 #include "Drawable.h"
+#include "PieceAggregate.h"
 
 class Scene
 {
@@ -16,7 +17,9 @@ public:
 	
 	void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraCenter);
 	void addPiece(Drawable *p);
+	void addPieceToAggregate(int agg, PieceInstance* p);
 	void removePiece(int id);
+	void removePieceFromAggregate(int agg, int id);
 
 	Drawable* getPiece(int index);
 

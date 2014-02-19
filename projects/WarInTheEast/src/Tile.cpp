@@ -93,7 +93,6 @@ void Tile::removeObj()
 void Tile::upgradePiece(PieceInstance* piece)
 {
 	if (rank != ELITE){
-		delete(gameObject);
 		gameObject = piece;
 		rank++;
 	}

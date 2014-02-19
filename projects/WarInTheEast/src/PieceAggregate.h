@@ -8,6 +8,7 @@ class PieceAggregate : public Drawable
 {
 	Piece* p;
 	std::vector<PieceInstance*> *pieces;
+	int aggID;
 
 public:
 	PieceAggregate(Piece* p);
@@ -15,6 +16,7 @@ public:
 	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
 
 	void addPiece(PieceInstance* p);
+	void removePiece(int id);
 	
 	/*Not Implemented*/
 	Drawable* clone(){ return 0; };	
