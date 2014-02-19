@@ -18,8 +18,6 @@ public:
 	
 	/*Not Implemented*/
 	Drawable* clone(){ return 0; };	
-	void move(float x, float y, float z) {};
-	void rotate() {};
 	/**/
 	void setID(int v){  };
 	int getID(){ return 0; }

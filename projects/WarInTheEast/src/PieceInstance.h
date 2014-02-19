@@ -6,6 +6,7 @@
 
 class PieceInstance : public Drawable
 {
+protected:
 	Piece* p;
 	glm::fquat orientation;
 	glm::mat4 transformation;
@@ -20,17 +21,14 @@ class PieceInstance : public Drawable
 public:
 	PieceInstance(Piece* vp, glm::fquat orientation, glm::mat4 transformation);
 
-	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye); 
+	virtual void draw(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraEye) = 0; 
 
 	/*Not Implemented*/
 	Drawable* clone(){ return 0; };	
-	void rotate() {};
 	/**/
 	void setID(int v);
 	int getID();
 
-	void move(float x, float y, float z);
-	void handleMovement();
 
 	void translate(glm::vec3 vec);
 	void reset();
