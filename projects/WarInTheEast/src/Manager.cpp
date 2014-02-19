@@ -155,8 +155,24 @@ void Manager::initMapList(ShaderProgram* sh)
 	/*...etc...**/
 }
 
+void setInstructions()
+{
+	std::cout << "Hello dear user!!!" << std::endl;
+	std::cout << "To play the game use the following keys:" << std::endl;
+	std::cout << "b -> change tile to build" << std::endl;
+	std::cout << "n -> change tile to movement" << std::endl;
+	std::cout << "m -> change tile to default" << std::endl;
+	std::cout << "t -> build turret on selected build tile" << std::endl;
+	std::cout << "u -> upgrade turret on selected tile" << std::endl;
+	std::cout << "r -> remove turret on selected tile" << std::endl;
+	std::cout << "s/l -> save/load tile grid" << std::endl;
+	std::cout << "arrow keys -> move around the tile grid" << std::endl;
+	std::cout << "Thank you and have fun!!!! =D" << std::endl;
+}
+
 Scene *Manager::initMap1(ShaderProgram* shProg)
 {
+	setInstructions();
 	//Piece* p;
 	std::vector<Drawable*> *ps = new std::vector<Drawable*>;
 	std::vector<Vertex> *vs = new std::vector<Vertex>;
@@ -230,6 +246,7 @@ Scene *Manager::initMap1(ShaderProgram* shProg)
 	Piece* tgrid = new TileGrid(*tilevertexes, *tileindexes, shProg, *totaltiles, scene->getId());
 	ps->push_back(tgrid);
 
+	//createEnemy(sh);
 	return(scene);
 }
 
@@ -369,6 +386,7 @@ void Manager::preLoadPieces(ShaderProgram* sh)
 	loadPiece(sh, "..\\objects\\lightNormalTower.obj", "..\\textures\\Tower_Normal.psd");
 	loadPiece(sh, "..\\objects\\lightAdvancedTower.obj", "..\\textures\\Tower_Normal.psd");
 	loadPiece(sh, "..\\objects\\lightEliteTower.obj", "..\\textures\\Tower_Normal.psd");
+	//loadPiece(sh, "..\\objects\\wisp.obj", "..\\textures\\wisp.psd");
 	
 	/*PieceReader::getInstance().readObject("..\\objects\\lightAdvancedTower.obj");
 	tex->load("..\\textures\\Tower_Normal.psd");
@@ -381,26 +399,17 @@ void Manager::preLoadPieces(ShaderProgram* sh)
 	p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -2);
 	preloadedObjs->push_back(p);
 	PieceReader::getInstance().clearAll();*/
-	createEnemy(sh);
 }
 
 void Manager::createEnemy(ShaderProgram* sh)
 {
-	Texture* tex = new Texture2D();
-	PieceReader::getInstance().readObject("..\\objects\\wisp.obj");
-	tex->load("..\\textures\\wisp.psd");
-	Piece *p = new Piece(PieceReader::getInstance().getVertices(), PieceReader::getInstance().getIndices(), sh, tex, -1);
-	preloadedObjs->push_back(p);
-	PieceReader::getInstance().clearAll();
-	PieceAggregate* ap = new PieceAggregate(p);
-	activeScene->addPiece(ap);
-
-	PieceInstance *piece = new PieceInstance(preloadedObjs->at(1), preloadedObjs->at(1)->getOrientation(), preloadedObjs->at(1)->getTransformation());
+	PieceInstance *piece = new Enemy(preloadedObjs->at(WISP-1), preloadedObjs->at(WISP-1)->getOrientation(), preloadedObjs->at(WISP-1)->getTransformation());
 	piece->setID(activeScene->getId());
 	piece->reset();
 	piece->translate(glm::vec3(0.0, 0.0, 0.0));
 	//starter->addObj(piece);
-	ap->addPiece(piece);
+	x = (PieceAggregate*)activeScene->getPiece(WISP);
+	x->addPiece(piece);
 }
 
 Scene* Manager::getScene()
@@ -479,7 +488,7 @@ void Manager::loadTileGrid()
 void Manager::addPieceToTile(int index, int type)
 {
 	PieceInstance* p;
-	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
+	Tile* tile = getScene()->getTileGrid()->getTile(index);
 	Texture* tex = new Texture2D();
 	switch (type)
 	{
@@ -488,7 +497,7 @@ void Manager::addPieceToTile(int index, int type)
 		if (!tile->hasObject())
 		{
 			x = (PieceAggregate*) activeScene->getPiece(NORMAL_TOWER);
-			p = new Tower(preloadedObjs->at(0), preloadedObjs->at(0)->getOrientation(), preloadedObjs->at(0)->getTransformation());
+			p = new Tower(preloadedObjs->at(NORMAL_TOWER - 1), preloadedObjs->at(NORMAL_TOWER - 1)->getOrientation(), preloadedObjs->at(NORMAL_TOWER-1)->getTransformation());
 			p->setID(activeScene->getId());
 			p->reset();
 			p->translate(tile->getPos());
@@ -508,7 +517,7 @@ void Manager::addPieceToTile(int index, int type)
 
 void Manager::upgradePieceInTile(int index)
 {
-	Tile* tile = getScene()->getTileGrid()->getTile(getScene()->getTileGrid()->whichSelected());
+	Tile* tile = getScene()->getTileGrid()->getTile(index);
 	PieceInstance* p;
 	Texture* tex = new Texture2D();
 	int type = tile->getRank();
@@ -516,7 +525,7 @@ void Manager::upgradePieceInTile(int index)
 	switch (type)
 	{
 	case STARTER:
-		p = new Tower(preloadedObjs->at(1), preloadedObjs->at(1)->getOrientation(), preloadedObjs->at(1)->getTransformation());
+		p = new Tower(preloadedObjs->at(NORMAL_TOWER - 1), preloadedObjs->at(NORMAL_TOWER - 1)->getOrientation(), preloadedObjs->at(NORMAL_TOWER-1)->getTransformation());
 		p->translate(tile->getPos());
 		activeScene->removePieceFromAggregate(NORMAL_TOWER, tile->getObjectID());
 		tile->upgradePiece(p);
@@ -524,7 +533,7 @@ void Manager::upgradePieceInTile(int index)
 		break;
 
 	case ADVANCED:
-		p = new Tower(preloadedObjs->at(2), preloadedObjs->at(2)->getOrientation(), preloadedObjs->at(2)->getTransformation());
+		p = new Tower(preloadedObjs->at(ADVANCED_TOWER - 1), preloadedObjs->at(ADVANCED_TOWER - 1)->getOrientation(), preloadedObjs->at(ADVANCED_TOWER-1)->getTransformation());
 		p->translate(tile->getPos());
 		activeScene->removePieceFromAggregate(ADVANCED_TOWER, tile->getObjectID());
 		tile->upgradePiece(p);
@@ -538,4 +547,16 @@ void Manager::upgradePieceInTile(int index)
 		break;
 	}
 
+}
+
+void Manager::removePieceFromTile(int index)
+{
+	Tile* tile = getScene()->getTileGrid()->getTile(index);
+	
+	int id = tile->getObjectID();
+	int rank = tile->getRank();
+
+	tile->removeObj();
+
+	activeScene->removePieceFromAggregate(rank + 1, id);
 }

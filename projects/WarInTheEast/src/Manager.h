@@ -16,7 +16,7 @@
 #include "Enemy.h"
 
 enum towerTypes { NORMAL, HEAVY, SLOW };
-enum objects {TILEGRID, NORMAL_TOWER, ADVANCED_TOWER, ELITE_TOWER};
+enum objects {TILEGRID, NORMAL_TOWER, ADVANCED_TOWER, ELITE_TOWER, WISP};
 
 class Manager
 {
@@ -34,20 +34,26 @@ public:
 
 	Manager();
 
+	//INITIALIZATION
 	void draw();
 	void initMapList(ShaderProgram* sh);
 	void initInterface(ShaderProgram* sh);
 	void loadPiece(ShaderProgram* sh, std::string objpath, std::string texpath);
 	void preLoadPieces(ShaderProgram* sh);
-	void createEnemy(ShaderProgram* sh);
+
+
+	//CAMERA
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);
 	void updateLastMXY(float x, float y);
 	void tilesRayPick(float x, float y);
 
+	//GAME CHANGERS
 	void addPieceToTile(int index, int type);
 	void upgradePieceInTile(int index);
+	void createEnemy(ShaderProgram* sh);
+	void removePieceFromTile(int index);
 
 	ShaderProgram *createShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
 

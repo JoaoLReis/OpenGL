@@ -59,6 +59,11 @@ bool EventHandler::handle(SDL_Event* Event)
 			if (manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->hasObject())
 				manager->upgradePieceInTile(manager->getScene()->getTileGrid()->whichSelected());
 		}
+		else if (Event->key.keysym.sym == SDLK_r)
+		{
+			if (manager->getScene()->getTileGrid()->getTile(manager->getScene()->getTileGrid()->whichSelected())->hasObject())
+				manager->removePieceFromTile(manager->getScene()->getTileGrid()->whichSelected());
+		}
 		else if (Event->key.keysym.sym == SDLK_UP)
 		{
 			int selected = manager->getScene()->getTileGrid()->whichSelected();

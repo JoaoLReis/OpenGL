@@ -103,7 +103,6 @@ void Tile::addObj(PieceInstance* piece)
 
 void Tile::removeObj()
 {
-	delete(gameObject);
 	gameObject = NULL;
 	rank = 0;
 }
