@@ -13,6 +13,7 @@ public:
 	Spawner(Tile* starter, Tile* Objective);
 	
 	/*Calculates the path to the objective.*/
+	std::map <std::string, Tile*> A_asterisk(Tile* start, Tile* goal);
 	void calculatePath(std::vector<Tile*> toSearch);
 	float getDist2Obj(glm::vec3 start, glm::vec3 finish);
 	void changeObjective(Tile* Objective);

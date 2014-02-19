@@ -10,7 +10,7 @@ class Tile
 	glm::vec3 pos;
 	
 	int type, oldtype, rank;
-	float heuristic;
+	float heuristic, f_heuristic;
 
 	PieceInstance* gameObject;
 
@@ -26,10 +26,13 @@ public:
 	int getRank();
 	int getObjectID();
 	float getHeuristic();
+	float getf_Heuristic();
 	bool isObjective();
 	bool hasObject();
 
 	void setHeuristic(float v);
+	void setf_Heuristic(float v);
+	std::string getPosInString();
 	void setType(int newtype);
 	void addAdj(Tile* tile);
 	void addObj(PieceInstance* piece);

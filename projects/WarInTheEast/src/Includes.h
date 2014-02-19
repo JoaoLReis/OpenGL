@@ -9,6 +9,7 @@
 #include "GL/glew.h"
 
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <chrono>
 #include <thread>

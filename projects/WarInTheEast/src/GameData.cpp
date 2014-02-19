@@ -2,6 +2,7 @@
 
 void GameData::GameDataInit()
 {
+	path = new PathHolder(*new std::vector<Tile*>);
 	frame = 0;
 }
 

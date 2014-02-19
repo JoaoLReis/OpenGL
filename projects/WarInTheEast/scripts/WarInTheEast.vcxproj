@@ -18,6 +18,7 @@
     <ClCompile Include="..\src\Interface.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Manager.cpp" />
+    <ClCompile Include="..\src\PathHolder.cpp" />
     <ClCompile Include="..\src\Piece.cpp" />
     <ClCompile Include="..\src\PieceAggregate.cpp" />
     <ClCompile Include="..\src\PieceInstance.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="..\src\Includes.h" />
     <ClInclude Include="..\src\Interface.h" />
     <ClInclude Include="..\src\Manager.h" />
+    <ClInclude Include="..\src\PathHolder.h" />
     <ClInclude Include="..\src\Piece.h" />
     <ClInclude Include="..\src\PieceAggregate.h" />
     <ClInclude Include="..\src\PieceInstance.h" />
@@ -67,6 +69,7 @@
     <None Include="..\textures\Default_Pick.psd" />
     <None Include="..\textures\Movement_Pick.psd" />
     <None Include="..\textures\Tower_Normal.psd" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{13483CA9-7C5E-4744-926D-C7A61539C1D7}</ProjectGuid>

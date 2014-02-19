@@ -35,6 +35,7 @@ public:
 	void initMapList(ShaderProgram* sh);
 	void initInterface(ShaderProgram* sh);
 	void preLoadPieces(ShaderProgram* sh);
+	void createEnemy(ShaderProgram* sh);
 	void updateCameraRotation(float x, float y);
 	void updateCameraPosition(float x, float y);
 	void updateCameraZoom(int amount);

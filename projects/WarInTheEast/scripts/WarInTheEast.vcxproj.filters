@@ -129,6 +129,9 @@
     <ClCompile Include="..\src\Spawner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PathHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Includes.h">
@@ -194,6 +197,9 @@
     <ClInclude Include="..\src\Spawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\PathHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shaders\fragment_shader.glsl">
@@ -229,5 +235,6 @@
     <None Include="..\objects\lightNormalTower.mtl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
